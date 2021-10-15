@@ -65,7 +65,7 @@ A module only has one reason to change. Problems occur because we put code that 
 
 Problems:
 
-- You are building backend for e-commerce application
+- You are building backend for e-commerce platforms
 - First time, you used MySQL to store product data
 - After a few months, you want to change MySQL to Mongodb
 - Every services are using it. They must apply a new change.
@@ -165,7 +165,7 @@ class MySqlProductRepository extends BaseProductRepository {
   // add private functions
 }
 
-class MongoProductRepository implements IProductRepository {
+class MongoProductRepository extends BaseProductRepository  {
   constructor(
     client: Mongoose,
     option: MongoOptions,
@@ -208,7 +208,7 @@ Behavior of the system can be changed by adding new code rather than changing ex
 
 The basic version of the DIP tells us that our code should depend on abstractions and not on concrete implementations.
 This principle states two essential things:
-- High-level class/modules should not depend on low-level class/modules. Both should depend on abstractions.
+- High-level modules should not depend on low-level modules. It should depend on abstractions.
 - Abstractions should not depend upon details. Details should depend on abstractions.
 
 Why all this? Because when we depend on a stable abstraction and the interface changes, all concretions that implement it are guaranteed to be updated. Additionally, we can easily make changes in a concrete implementation without having to change the interface or any of the classes that use it.
@@ -217,9 +217,7 @@ Why all this? Because when we depend on a stable abstraction and the interface c
 
 ```typescript
 class ProductService {
-  constructor() {
-    emailService = new SendGridService();
-    productRepo = new ProductRepository();
+  constructor(private readonly productRepository: MySqlProductRepository) {
   }
 }
 ```
@@ -228,7 +226,8 @@ class ProductService {
 
 ```typescript
 class ProductService {
-  constructor(emailService, productRepo: IProductRepository) {}
+  constructor(private readonly productRepository: BaseProductRepository) {
+  }
 }
 ```
 ## Liskov Substitution Principle (LSP)
@@ -253,22 +252,20 @@ class ProductService {
         ...
     }
 }
+// Remember polymorphism of OOP
 
 // Before
-const productRepository = new MySqlProductRepository(
+const mySqlProductRepository = new MySqlProductRepository(
   // Injections
 );
+const productService = new ProductService(mySqlProductRepository);
 
 // Now
-const productRepository = new MongoProductRepository(
+const mongoProductRepository = new MongoProductRepository(
    // Injections
 );
+const productService = new ProductService(mongoProductRepository);
 
-// Lower level classes or components can be substituted without affecting the behavior of the higher level classes and components.
-// Replace productRepository without affected to productService
-const productService = new ProductService(productRepository); // Not change
-
-... 
 
 // Define mock implementation or using jest mock
 class MockProductRepository extends BaseProductRepository {
@@ -295,11 +292,9 @@ class MockProductRepository extends BaseProductRepository {
 }
 
 // Unit test
-const productRepository = new MockProductRepository(); // LSP
-const productService = new ProductService(productRepository);
-
+const mockProductRepository = new MockProductRepository(); // LSP
+const productService = new ProductService(mockProductRepository);
 ```
-
 # Interface Segregation Principle (ISP)
 
 The Interface Segregation Principle (ISP) states that Clients should not be forced to depend on methods they do not use.

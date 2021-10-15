@@ -109,7 +109,8 @@ export class ProductService implements IProductService {
     constructor (@Inject() private readonly productRepository: IProductRepository,
         @Inject() private readonly eventPublisher: IEventPublisher,
         @Inject() private readonly userService: IUserService,
-        @Inject() private readonly productRedisService: IProductRepository,
+        @Inject() private readonly productRedisService2: IProductRepository,
+        @Inject() private readonly productRedisService1: IProductRepository,
         @Inject() logger: Logger) {
     }
 

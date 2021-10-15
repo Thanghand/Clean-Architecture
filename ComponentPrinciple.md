@@ -25,7 +25,6 @@ This is basically the same thing as the Single Responsibility Principle applied 
 ### The Common Reuse Principle (CRP)
 
 Don't force users of a component to depend on things they don't need.
-
 As with the REP and the CCP, the CRP also help us decide which classes shouldn't be placed together into the same component.
 
 Those components should be split up so that the users don’t have to depend on classes that they don’t use.
@@ -34,6 +33,8 @@ This is basically the same thing as Interface Segregation Principle.
 
 **Note**:
 These three principles (REP, CCP, and CRP) are in tension with each other. Too much splitting up or too much grouping can both cause problems. One needs to balance these principles based on the situation.
+
+Uncle Bob advises us to focus on CCP than REP on early stage of development because develop-ability is more important than reuse.
 
 ## The next three principles deal with the coupling between components:
 
@@ -51,9 +52,202 @@ Having cycles in the source code component dependency graph brings the following
     - Working out the order of the build is difficult and there probably is no correct order.
     - You need to have version agreements between multiple components to be able to release. You lose independence of release-ability and the entangled components now need to be released together.
 
+Example:
+
+```typescript
+packageJson {
+    "version": "2.0.0",
+    "dependencies": {
+        "user-service": "2.0.0"
+    }
+}
+
+class RoleService {
+
+    constructor(private readonly userService: UserService,
+        private readonly httpClient: HttpClient) {
+    }
+
+    async getRoles(userId) {
+        const user = await this.userService.getById(userId);
+        if (!user) {
+            throw new NotFoundException();
+        }
+
+        const roles = await this.httpClient.get(`https://dasda/${user.organizationId}/roles`);
+        return roles;
+    }
+
+}
+```
+
+```typescript
+packageJson {
+    "version": "2.0.0",
+    "dependencies": {
+        "authorize-service": "2.0.0"
+    }
+}
+
+class UserService {
+
+    constructor(private readonly authorizeService: AuthorizeService,
+        private readonly userRepository: IUserRepository) {
+    }
+
+    getById(userId, tokenPayload = {}) {
+
+        const user = await this.userRepository.getById(userId);
+        if (!user) {
+            throw new NotFoundException();
+        }
+
+        if (isEmptyObject(tokenPayload)) {
+            return user;
+        }
+
+        const hasPermission = await this.authorizerService.hasPermission(user.id, user.roleId);
+        if (!hasPermission) {
+            throw new ForBiddenException();
+        }
+        return user;
+
+    }
+}
+```
+
+```typescript
+packageJson {
+    "version": "2.0.0",
+    "dependencies": {
+        "role-service": "2.0.0"
+    }
+}
+
+class AuthorizeService {
+    constructor {private readonly roleService: RoleService}
+
+     async someFunction(userId) {
+        const roles = await this.roleService.getRoles(userId);
+        for (const role of roles) {
+            if (hasPermission(userId, role.id);
+                // ...
+        }
+    }
+    
+    hasPermission(userId, roleId) {
+        // Update logic to check permission
+    }
+}
+```
+
 **Solution**:
-**Technique 1**: Use Dependency Inversion Principle
-**Technique 2**: Create a new component
+### Technique 1**: Use Dependency Inversion Principle
+
+```typescript
+packageJson {
+    "name": "permission-service",
+    "version": "1.0.0"
+}
+class Permission {
+    constructor {}
+
+    async checkPermission(userId, roleId) {
+        const roles = await this.roleService.getRoles(userId);
+        const foundRole = roles.find(r => r.id === roleId);
+        return roles.find(r => r.id === roleId) !== undefined;
+        // Update logic to check permission
+    }
+}
+```
+
+```typescript
+packageJson {
+    "name": "role-service",
+    "version": "1.0.0",
+    "dependencies": {
+        "user-service": "1.0.0",
+    }
+}
+
+class RoleService {
+
+    constructor(private readonly userService: UserService,
+        private readonly httpClient: HttpClient) {
+    }
+
+    async getRoles(userId) {
+        const user = await this.userService.getById(userId);
+        if (!user) {
+            throw new NotFoundException();
+        }
+
+        const roles = await this.httpClient.get(`https://dasda/${user.organizationId}/roles`);
+        return roles;
+    }
+
+}
+```
+
+
+```typescript
+packageJson {
+    "name": "user-service",
+    "version": "1.0.0",
+    "dependencies": {
+        "core-authorize-service": "1.0.0"
+    }
+}
+
+class UserService {
+
+    constructor(private readonly authorizeService: IAuthorizeService,
+        private readonly userRepository: IUserRepository) {
+    }
+
+    getById(userId, tokenPayload = {}) {
+
+        const user = await this.userRepository.getById(userId);
+        if (!user) {
+            throw new NotFoundException();
+        }
+
+        if (isEmptyObject(tokenPayload)) {
+            return user;
+        }
+
+        const hasPermission = await this.authorizerService.hasPermission(user.id, user.roleId);
+        if (!hasPermission) {
+            throw new ForBiddenException();
+        }
+        return user;
+
+    }
+}
+```
+
+```typescript
+packageJson {
+    "name": "authorize-service",
+    "version": "1.0.0",
+    "dependencies": {
+        "role-service": "1.0.0"
+    }
+}
+
+class AuthorizeService {
+    constructor {private readonly roleService: RoleService,
+        private readonly permission: Permission}
+
+    async someFunction(userId) {
+        const roles = await this.roleService.getRoles(userId);
+        for (const role of roles) {
+            if (this.permission.hasPermission(userId, role.id);
+                // ...
+        }
+    }
+}
+```
 
 ### Stable Dependency Principle (SDP):
 
