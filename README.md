@@ -31,6 +31,8 @@
 Build an e commerce clothes store project (B2C)
 Web, POS Desktop, Mobile, ...
 
+Add image ?
+
 - Requirements:
     1. Supplier:
         - Create/Import products
@@ -61,6 +63,8 @@ Mobile: Native App
 Backend: node.js, Loopback v2, RabbitMQ
 Database: Mongodb (easy)
 Process: Scrum
+
+Total developers:  ?
 
 - Project Manager said we should use "MVC" for backend and MVVM for frontend, because it is really easy to understand for fresher/junior developer. They can catch up easy.
 - Ignore unit test in the first time (because time is really rush)
