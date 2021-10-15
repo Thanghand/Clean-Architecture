@@ -1,20 +1,74 @@
-# Open/Closed Principle (OCP)
+# Single Responsibility Principle
 
-Uncle Bob himself used to say: “Good architecture reduces the amount of modified code to the absolute minimum. Ideally to zero”.
-
-This section presents the OCP as goal: build systems that are easy to extend without requiring high cost of change.
-
-Open means open for extension. Closed means closed for modification.
-
-"A software artifact should be open for extension but closed for modification.” What does that mean though? This principle basically states that you should allow users to add new functionalities without changing existing code."
-
-> "Higher level-components are protected from changes to lower level components."
-
-**How to do that?**:
+SRP is Not: "Every module should do one thing". - Note that there is a lower level rule that states that functions should only do one thing. That rule still holds, but it is NOT the SRP.
+SRP is: "A module should have one, and only one, reason to change" - "Reason to change" can be interpreted as a group of users or stakeholders for which the module was built for and that would want the module to be changed in the same way. This group is also referred to as actor - Another form of SRP: "A module should be responsible to one, and only one, actor." - Another form of SRP: "Problems occur because we put code that different actors depend on into close proximity. The SRP says to separate the code that different actors depend on.
 
 Example:
 
--   Assume you need to MongoDB for your project
+- Employee
+- You have HR, Accounting, IT
+
+```
+class Employee {
+    constructor({
+        // Init data
+    })
+
+    calculatePay(): number {
+        // implement logic
+        // Using some if else
+    }
+
+    reportHours(): number {
+        // implement logic
+    }
+
+}
+```
+
+should be
+
+```
+abstract class Employee {
+    abstract calculatePay(): number;
+    abstract reportHours(): number;
+}
+```
+
+class HR extends Employee {
+calculatePay(): number {
+
+    }
+    reportHours(): number {
+
+    }
+
+}
+
+class Accounting extends Employee {
+calculatePay(): number {
+
+    }
+    reportHours(): number {
+
+    }
+
+}
+
+=> Much better. Each employee in this social structure has a single place where we can go to in order adjust their respective algorithm that is most likely to change.
+
+## Conclusion
+
+A module only has one reason to change. Problems occur because we put code that different actors depend on into close proximity. The SRP says to separate the code that different actors depend on.
+
+# OCP, LSP and DIP
+
+Problems:
+
+- You are building backend for e-commerce application
+- First time, you used MySQL to store product data
+- After a few months, you want to change MySQL to Mongodb
+- Every services are using it. They must apply a new change.
 
 ```typescript
 class MongoProductRepository {
@@ -27,74 +81,19 @@ class MongoProductRepository {
         return this.mongoose;
     }
 
-    isExisted(id) {
-        // Query from DB
+    isExisted(id:string) {
+      // Implement here
     }
 
-    ...
-}
-```
-
-After 6 months, your boss tell you want to use Redis?
-
-```typescript
-interface IProductRepository {
-    isExisted(id) {}
+    isManyExisted(ids: string[]) {
+        // Implement logic
+    }
     ...
 }
 
-class MongoProductRepository implements IProductRepository {
-
-    constructor() {}
-
-    isExisted(id) {
-        // Query from DB
-    }
-}
-
-class RedisProductRepository implements IProductRepository {
-
-    constructor() {}
-
-    isExisted(id) {
-        // Query from DB
-    }
-
-
-}
-
-// Define mock implementation or using jest mock
-class MockProductRepositoryImpl implements IProductRepository {
-
-    isExisted(id) {
-        // mock the result
-    }
-}
-```
-
-# Liskov Substitution Principle (LSP)
-
-> If S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program.
-
-The **substitution** is all you need to remember
-
-This principle means that lower level classes or components can be **substituted** without affecting the behavior of the higher level classes and components.
-
-> A motivation behind this principle is to ensure that inheritance is not being used when it is not appropriate for the code.
-
-**Example 1**:
-In Java an ArrayList and a LinkedList both implement the List interface so they can be substituted for each other
-
-**Example 2**:
-In our above Example for OCP. We can replace MongoDB to DynamoDB but dont affect the domain logic.
-
-```typescript
 class ProductService {
 
-    /**
-     * @param {IProductRepository}
-     */
-    constructor(productRepository) {
+    constructor(productRepository: MongoProductRepository) {
         this.productRepository = productRepository;
     }
 
@@ -105,10 +104,200 @@ class ProductService {
     }
 }
 
-const productRepository = new MongoProductRepository(); // Before
-const productRepository = new DynamoProductRepository(); // Now
+class OrderService {
 
+  constructor(productRepository: MongoProductRepository) {
+        this.productRepository = productRepository;
+    }
+
+  async create(order) {
+      // Check existed product
+      const productIds = order.items.map(i => i.id);
+      const isProductsExisted = await this.productRepository.isManyExisted(productIds);
+  }
+}
+```
+
+How to solve this problem with a minimum cost change ?
+=> Using OCP, LSP and DIP
+
+## Open/Closed Principle (OCP)
+
+This is the O of SOLID. Open means open for extension. Closed means closed for modification. So you should be able to add functionality to a class or component, but you shouldn’t need to modify existing functionality.
+How do you do that? You make sure that every class or component has just one responsibility and then you hide the more stable classes behind interfaces so that they won’t be affected when less stable classes have to change (DIP).
+
+```typescript
+abstract class BaseProductRepository {
+  constructor(private readonly mapper: DataMapper) {}
+
+  abstract isExisted(id: string): Promise<boolean>;
+  abstract isManyExisted(ids: string[]): Promise<boolean>;
+  abstract getById(id): Promise<any>;
+  abstract getMany(query, project): Promise<any[]>;
+  abstract create(domain): Promise<string>;
+}
+
+class MySqlProductRepository extends BaseProductRepository {
+  constructor(client: MySqlClient, mapper: MySqlProductDataMapper) {
+    super(mapper);
+  }
+
+  isExisted(id): Promise<boolean> {
+    // Implement logic
+  }
+
+  isManyExisted(ids: string[]): Promise<boolean> {
+    // Implement logic
+  }
+
+  getById(id: string): Promise<any> {
+    // Implement logic
+  }
+
+  create(domain: any): Promise<string> {
+    // Implement logic
+  }
+
+  getMany(query, project): Promise<any[]> {
+    // Implement logic
+  }
+
+  // add private functions
+}
+
+class MongoProductRepository implements IProductRepository {
+  constructor(
+    client: Mongoose,
+    option: MongoOptions,
+    mapper: MongoProductDataMapper
+  ) {
+    super(mapper);
+  }
+
+  isExisted(id): Promise<boolean> {
+    // Implement logic
+  }
+
+  isManyExisted(ids: string[]): Promise<boolean> {
+    // Implement logic
+  }
+
+  getById(id: string): Promise<any> {
+    // Implement logic
+  }
+
+  create(domain: any): Promise<string> {
+    // Implement logic
+  }
+
+  getMany(query, project): Promise<any[]> {
+    // Implement logic
+  }
+
+  // add private functions
+  private getByName(name) {
+    // Implement logic
+  }
+}
+```
+### Conclusion
+
+Behavior of the system can be changed by adding new code rather than changing existing one.
+
+## Dependency Inversion Principle (DIP)
+
+The basic version of the DIP tells us that our code should depend on abstractions and not on concrete implementations.
+This principle states two essential things:
+- High-level class/modules should not depend on low-level class/modules. Both should depend on abstractions.
+- Abstractions should not depend upon details. Details should depend on abstractions.
+
+Why all this? Because when we depend on a stable abstraction and the interface changes, all concretions that implement it are guaranteed to be updated. Additionally, we can easily make changes in a concrete implementation without having to change the interface or any of the classes that use it.
+
+**Bad**
+
+```typescript
+class ProductService {
+  constructor() {
+    emailService = new SendGridService();
+    productRepo = new ProductRepository();
+  }
+}
+```
+
+**Good**
+
+```typescript
+class ProductService {
+  constructor(emailService, productRepo: IProductRepository) {}
+}
+```
+## Liskov Substitution Principle (LSP)
+
+> If S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program.
+
+I guess they needed the L to spell SOLID, but “substitution” is all you need to remember. This principle means that lower level classes or components can be substituted without affecting the behavior of the higher level classes and components. This can be done by implementing abstract classes or interfaces. For example, in Java an ArrayList and a LinkedList both implement the List interface so they can be substituted for each other. If this principle were applied on the architectural level, MySQL could be substituted with MongoDB without affecting the domain logic.
+
+```typescript
+
+// Higher class
+class ProductService {
+
+    // DIP
+    constructor(productRepository: BaseProductRepository) {
+        this.productRepository = productRepository;
+    }
+
+    async updateProduct(product) {
+        // Check existed product
+        const isProductExisted = await this.productRepository.isExisted(product.id);
+        ...
+    }
+}
+
+// Before
+const productRepository = new MySqlProductRepository(
+  // Injections
+);
+
+// Now
+const productRepository = new MongoProductRepository(
+   // Injections
+);
+
+// Lower level classes or components can be substituted without affecting the behavior of the higher level classes and components.
+// Replace productRepository without affected to productService
 const productService = new ProductService(productRepository); // Not change
+
+... 
+
+// Define mock implementation or using jest mock
+class MockProductRepository extends BaseProductRepository {
+
+  isExisted(id): Promise<boolean> {
+    // Implement mock logic
+  }
+
+  isManyExisted(ids: string[]): Promise<boolean> {
+    // Implement mock logic
+  }
+
+  getById(id: string): Promise<any> {
+    // Implement mock logic
+  }
+
+  create(domain: any): Promise<string> {
+    // Implement mock logic
+  }
+
+  getMany(query, project): Promise<any[]> {
+    // Implement mock logic
+  }
+}
+
+// Unit test
+const productRepository = new MockProductRepository(); // LSP
+const productService = new ProductService(productRepository);
+
 ```
 
 # Interface Segregation Principle (ISP)
@@ -184,36 +373,5 @@ class CreateProductUseCase extends UseCase {
 
 class UpdateProductUseCase extends UseCase {
     ...
-}
-```
-
-# Dependency Inversion Principle (DIP)
-
-The basic version of the DIP tells us that our code should depend on abstractions and not on concrete implementations.
-
-This principle states two essential things:
-
--   High-level modules should not depend on low-level modules. Both should depend on abstractions.
--   Abstractions should not depend upon details. Details should depend on abstractions.
-
-Why all this? Because when we depend on a stable abstraction and the interface changes, all concretions that implement it are guaranteed to be updated. Additionally, we can easily make changes in a concrete implementation without having to change the interface or any of the classes that use it.
-
-**Bad**
-
-```
-class ProductService {
-    constructor() {
-        emailService = new SendGridService();
-        productRepo = new ProductRepository();
-    }
-}
-```
-
-**Good**
-
-```
-class ProductService {
-    constructor(emailService, productRepo: IProductRepo) {
-    }
 }
 ```
