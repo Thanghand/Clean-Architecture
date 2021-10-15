@@ -31,13 +31,7 @@
 Build an e commerce clothes store project (B2C)
 Web, POS Desktop, Mobile, ...
 
-<<<<<<< HEAD
-Add image ?
-
-- Requirements:
-=======
 -   Requirements:
->>>>>>> f3db4ea79b344e0ae2bc3e949898cf51158d0146
     1. Supplier:
         - Create/Import products
         - Update Product
@@ -68,17 +62,9 @@ Backend: node.js, Loopback v2, RabbitMQ
 Database: Mongodb (easy)
 Process: Scrum
 
-<<<<<<< HEAD
-Total developers:  ?
-
-- Project Manager said we should use "MVC" for backend and MVVM for frontend, because it is really easy to understand for fresher/junior developer. They can catch up easy.
-- Ignore unit test in the first time (because time is really rush)
-- We think unit test make us slow down.
-=======
 -   Project Manager said we should use "MVC" for backend and MVVM for frontend, because it is really easy to understand for fresher/junior developer. They can catch up easy.
 -   Ignore unit test in the first time (because time is really rush)
 -   We think unit test make us slow down.
->>>>>>> f3db4ea79b344e0ae2bc3e949898cf51158d0146
 
 However, after a few months, code become bigger. And business become more complicated. And it change all the time.
 
