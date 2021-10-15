@@ -1,113 +1,219 @@
+# Open/Closed Principle (OCP)
 
-# Design Principle
+Uncle Bob himself used to say: “Good architecture reduces the amount of modified code to the absolute minimum. Ideally to zero”.
 
-> Good software systems begin with clean code. On the one hand, if the
-> bricks aren't well made, the architecture of the building doesn't
-> matter much. On the other hand, you can make a substantial mess with
-> well-made bricks. This is where the SOLID principles come in.
-
-- SOLID tells us how to arrange functions and data structures into
-  classes / modules, and **how those classes / modules should be
-  interconnected**. SOLID is therefore applied at the mid-level (class /
-  module level).
-  - There are other sets of principles for the component level and the
-  high-level architecture. We will study these later.
-- SOLID is not limited OOP. In the context of SOLID, a "class / module"
-  is a grouping of functions and data (all software have this grouping,
-  whether it is called a `class` a `module` or something else). We will
-  refer to this grouping as class or a module interchangeably in this
-  part.
-  - For many languages and teams a `module` is coded in a single `source
-    file`, but this doesn't have to be the case.
-- SOLID goals: produce mid-level software structures that:
-  - Tolerate change
-  - Are easy to understand
-  - Are the basis of components that can be used in many systems (are
-    reusable).
-
-#### Executive Summary
-
-- **Single Responsibility:** a module only has one reason to change.
-  Problems occur because we put code that different actors depend on
-  into close proximity. The SRP says to *separate the code that
-  different actors depend on.*
-- **Open-Closed Principle:** behaviour of the system can be changed by
-  adding new code rather than changing existing one.
-- **Liskov Substitution Principle:** interchangeable parts adhere to a
-  contract that allows them to be substituted without the user of the
-  part having to change.
-- **Interface Segregation Principle:** don't depend on things that you
-  don't use (i.e. only depend on the interface that you need).
-- **Dependency Inversion Principle:** Low-level modules depend on
-  high-level ones, by adhering to interfaces the high-level modules
-  defines. Not the other way around.
-
-### Single Responsibility Principle
-
-SRP is Not: "Every module should do one thing".
-    - Note that there is a lower level rule that states that functions should only do one thing. That rule still holds, but it is NOT the SRP.
-SRP is: "A module should have one, and only one, reason to change"
-    - "Reason to change" can be interpreted as a group of users or stakeholders for which the module was built for and that would want the module to be changed in the same way. This group is also referred to as actor
-    - Another form of SRP: "A module should be responsible to one, and only one, actor."
-    - Another form of SRP: "Problems occur because we put code that different actors depend on into close proximity. The SRP says to separate the code that different actors depend on.
-
-Example: 
-- Employee
-- You have HR, Accounting, IT
-
-```
-class Employee {
-    constructor({
-        // Init data
-    })
-
-    calculatePay(): number {
-        // implement logic
-        // Using some if else
-    }
-
-    reportHours(): number {
-        // implement logic
-    }
-
-}
-```
-
-should be
-
-```
-abstract class Employee {
-    abstract calculatePay(): number;
-    abstract reportHours(): number; 
-}
-```
-
-class HR extends Employee {
-    calculatePay(): number {
-
-    }
-    reportHours(): number {
-
-    }
-}
-
-class Accounting extends Employee {
-    calculatePay(): number {
-
-    }
-    reportHours(): number {
-        
-    }
-}
-
-=> Much better. Each employee in this social structure has a single place where we can go to in order adjust their respective algorithm that is most likely to change.
-
-The key thing is to separate responsibility based on the social structure of the users using the application.
-
-**In the next chapters we discuss the architectural implications of
-these principles.**
-
-### Open Close Principe (OCP)
 This section presents the OCP as goal: build systems that are easy to extend without requiring high cost of change.
-The interesting bits of this chapter are a series of inter-related ideas that explain how to achieve the goal.
 
+Open means open for extension. Closed means closed for modification.
+
+"A software artifact should be open for extension but closed for modification.” What does that mean though? This principle basically states that you should allow users to add new functionalities without changing existing code."
+
+> "Higher level-components are protected from changes to lower level components."
+
+**How to do that?**:
+
+Example:
+
+-   Assume you need to MongoDB for your project
+
+```typescript
+class MongoProductRepository {
+
+    constructor(mongoose) {
+        this.mongoose = mongoose;
+    }
+
+    getClient() {
+        return this.mongoose;
+    }
+
+    isExisted(id) {
+        // Query from DB
+    }
+
+    ...
+}
+```
+
+After 6 months, your boss tell you want to use Redis?
+
+```typescript
+interface IProductRepository {
+    isExisted(id) {}
+    ...
+}
+
+class MongoProductRepository implements IProductRepository {
+
+    constructor() {}
+
+    isExisted(id) {
+        // Query from DB
+    }
+}
+
+class RedisProductRepository implements IProductRepository {
+
+    constructor() {}
+
+    isExisted(id) {
+        // Query from DB
+    }
+
+
+}
+
+// Define mock implementation or using jest mock
+class MockProductRepositoryImpl implements IProductRepository {
+
+    isExisted(id) {
+        // mock the result
+    }
+}
+```
+
+# Liskov Substitution Principle (LSP)
+
+> If S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program.
+
+The **substitution** is all you need to remember
+
+This principle means that lower level classes or components can be **substituted** without affecting the behavior of the higher level classes and components.
+
+> A motivation behind this principle is to ensure that inheritance is not being used when it is not appropriate for the code.
+
+**Example 1**:
+In Java an ArrayList and a LinkedList both implement the List interface so they can be substituted for each other
+
+**Example 2**:
+In our above Example for OCP. We can replace MongoDB to DynamoDB but dont affect the domain logic.
+
+```typescript
+class ProductService {
+
+    /**
+     * @param {IProductRepository}
+     */
+    constructor(productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    async updateProduct(product) {
+        // Check existed product
+        const isProductExisted = await this.productRepository.isExisted(product.id);
+        ...
+    }
+}
+
+const productRepository = new MongoProductRepository(); // Before
+const productRepository = new DynamoProductRepository(); // Now
+
+const productService = new ProductService(productRepository); // Not change
+```
+
+# Interface Segregation Principle (ISP)
+
+The Interface Segregation Principle (ISP) states that Clients should not be forced to depend on methods they do not use.
+
+**Goal**: This principle aims at splitting a set of actions into smaller sets so that a Class executes ONLY the set of actions it requires.
+
+If one class perform more than interface than it need. It cause **Interface Pollution**
+
+When a class is required to perform actions that are not useful, it is wasteful and may produce unexpected bugs if the class does not have the ability to perform those actions.
+
+A class should perform only actions that are needed to fulfil its role. Any other action should be removed completely or moved somewhere else if it might be used by another class in the future.
+
+```typescript
+interface IWriteProductService {
+    create();
+    update();
+}
+
+interface IReadProductService {
+    findById();
+    searchProducts();
+}
+
+class ProductService implements IWriteProductService, IReadProductService {
+
+    constructor(
+        // Create, Maybe Update doesn't need emailService or SupplierRepo
+        private productRepo: ProductRepo,
+        supplierRepo: SupplierRepo,
+        emailService: EmailService,
+        kinesisService: KinesisService,
+        // Read
+        redisService: IRedisService,
+    )
+    create() {
+        ...
+    }
+    update() {
+        ...
+    }
+
+    findById() {
+        ...
+    }
+
+    searchProducts() {
+        ...
+    }
+}
+```
+
+// Imagine that we are using lambda for handling the api, every api request will have their own lambda.
+
+```typescript
+class UseCase {
+    execute(params);
+}
+
+class FindProductByIdUseCase extends UseCase {
+    constructor(redisService) {
+    }
+
+    execute(params) {
+        // Implement logic here
+    }
+}
+
+class CreateProductUseCase extends UseCase {
+    ...
+}
+
+class UpdateProductUseCase extends UseCase {
+    ...
+}
+```
+
+# Dependency Inversion Principle (DIP)
+
+The basic version of the DIP tells us that our code should depend on abstractions and not on concrete implementations.
+
+This principle states two essential things:
+
+-   High-level modules should not depend on low-level modules. Both should depend on abstractions.
+-   Abstractions should not depend upon details. Details should depend on abstractions.
+
+Why all this? Because when we depend on a stable abstraction and the interface changes, all concretions that implement it are guaranteed to be updated. Additionally, we can easily make changes in a concrete implementation without having to change the interface or any of the classes that use it.
+
+**Bad**
+
+```
+class ProductService {
+    constructor() {
+        emailService = new SendGridService();
+        productRepo = new ProductRepository();
+    }
+}
+```
+
+**Good**
+
+```
+class ProductService {
+    constructor(emailService, productRepo: IProductRepo) {
+    }
+}
+```
