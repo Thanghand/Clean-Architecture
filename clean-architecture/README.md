@@ -1,19 +1,19 @@
 # Summary
-    1. Introduction
-    2. Design Principles
+    - Introduction [Review]
+    - Starting with the Bricks: Programming Paradigms [New] [Bin]
+    - Design Principles [Review] [Bin]
         - Dependency injections
-    3. Component Principles
-    4. Architectures
-        - Summary
-        - Talk about TDD
-    5. Details
-    6. Demo
-    7. Conclusion
+    - Component Principles [Review and Add Image] [Thang]
+    - Architectures
+        - part 1 [Review]
+    - Details
+        - 
+    - Demo [Inprogress]
+    - Conclusion
         - CLean Architecture
         - Domain Centric (TDD)
         -
-    8. Quick introduction CQRS and DDD
-
+    - Quick introduction CQRS and DDD 
 # Introduction
 
 ## Problems/Questions with application is growing up,

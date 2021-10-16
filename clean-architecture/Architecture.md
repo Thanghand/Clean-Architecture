@@ -4,6 +4,8 @@
 
 # Clean Architecture
 
+
+
 # Entity (Domain Centric)
 - Entity is a normal model/domain class
 - Normally, we think model/domain class actually only have data attributes and some get set functions.
