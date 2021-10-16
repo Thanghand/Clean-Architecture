@@ -1,5 +1,4 @@
 # Summary
-
     1. Introduction
     2. Design Principles
         - Dependency injections
@@ -8,7 +7,6 @@
         - Summary
         - Talk about TDD
     5. Details
-        -
     6. Demo
     7. Conclusion
         - CLean Architecture

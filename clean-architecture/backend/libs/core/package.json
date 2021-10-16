@@ -1,0 +1,27 @@
+{
+  "name": "company-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "thangcao",
+  "license": "ISC",
+  "dependencies": {
+    "@nestjs/common": "^7.6.15",
+    "install": "^0.13.0",
+    "npm": "^8.1.0"
+  },
+  "devDependencies": {
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript-tslint-plugin": "^1.0.1"
+  }
+}
