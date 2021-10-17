@@ -86,9 +86,9 @@ class IT extends Employee {}
 
 A module only has **ONE** reason to change. Problems occur because we put code that different actors depend on into close proximity. The **SRP** says to separate the code that different actors depend on.
 
-## **The Perfect Combinition Of 3 Important Principles**
+# **The Perfect Combinition Of 3 Important Principles**
 
-### **Problems**:
+## **Problems**:
 
 -   You are building backend for e-commerce platforms
 -   First time, you used MySQL to store product data
@@ -146,7 +146,7 @@ class OrderService {
 How to solve this problem with a minimum cost change ?
 => Using OCP, LSP and **DIP**
 
-### **Open Closed Principle (OCP)**
+## **Open Closed Principle (OCP)**
 
 -   This is the O of SOLID. Open means open for extension. Closed means closed for modification. So you should be able to add functionality to a class or component, but you shouldn’t need to modify existing functionality.
 
@@ -231,7 +231,7 @@ class MongoProductRepository extends BaseProductRepository {
 
 Behavior of the system can be changed by adding new code rather than changing existing one.
 
-### **Dependency Inversion Principle (DIP)**
+## **Dependency Inversion Principle (DIP)**
 
 The basic version of the **DIP** tells us that our code should depend on abstractions and not on concrete implementations.
 This principle states two essential things:
@@ -257,7 +257,7 @@ class ProductService {
 }
 ```
 
-### **Liskov Substitution Principle (LSP)**
+## **Liskov Substitution Principle (LSP)**
 
 > If S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program. (Barbara Liskov)
 
