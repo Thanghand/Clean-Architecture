@@ -1,18 +1,33 @@
-# Paradigm Overview:
+# **Summary**
+
+-   [Paradigm Overview](#paradigm-overview)
+-   [Structured Programming](#structured-programming)
+-   [Object Oriented Programming](#object-oriented-programming)
+    -   [Encapsulation](#encapsulation)
+    -   [Inheritance](#inheritance)
+    -   [Polymorphism](#polymorphism)
+    -   [Encapsulation](#encapsulation)
+-   [Functional Programming](#functional-programming)
+    -   [Immutable and Architecture](#immutable-and-architecture)
+    -   [Different between Mutable and Immutable](#different-between-mutable-and-immutable)
+    -   [What is Functional Programming?](#what-is-functional-programming)
+    -   [Why use Functional Programming](#why-use-functional-programming)
+
+# **Paradigm Overview**:
 
 The journey of Programing Paradigm:
 
 -   **Structured Programming**: Removed **goto** statements and replaced them with more disciplined if/then/else and do/while/until constructs.
 
--   **Object-Oriented Programming**: Removed function pointers.
+-   **Object Oriented Programming**: Removed function pointers.
 
 -   **Functional Programming**: driven by immutability removed assignment of state.
 
 These 3 paradigms were discovered within 10 years (1958 - 1968). Many decades have passed and no new paradigms have been added. Robert M. claims that it is likely that these are the only ones we will discover.
 
-# Structure Programming:
+# **Structure Programming**:
 
-The first paradigm to be adopted (but not the first to be invented) was structured programming, which was discovered by Edsger Wybe Dijkstra in 1968
+> The first paradigm to be adopted (but not the first to be invented) was structured programming, which was discovered by Edsger Wybe Dijkstra in 1968
 
 **Concept**: Structured programming is a programming paradigm aimed at improving the clarity, quality, and development time of a computer program by making extensive use of the structured control flow constructs of selection (if/then/else) and repetition (while and for), block structures, and subroutines. (define by Wikipedia).
 
@@ -44,15 +59,15 @@ function calculation() {
 }
 ```
 
-# Object Oriented Programming:
+# **Object Oriented Programming**:
 
-The second paradigm to be adopted was actually discovered two years earlier, in 1966, by Ole Johan Dahl and Kristen Nygaard.
+> The second paradigm to be adopted was actually discovered two years earlier, in 1966, by Ole Johan Dahl and Kristen Nygaard.
 
 **Concept:** Object Oriented programming (OOP) is a programming paradigm that relies on the concept of classes and objects. It is used to structure a software program into simple, reusable pieces of code blueprints (usually called classes), which are used to create individual instances of objects.
 
 The main idea behind Object Oriented Programming is to make our code more simplicity, reusability, extendibility, and security.
 
-## Encapsulation:
+## **Encapsulation**:
 
 -   Encapsulation is a mechanism of wrapping up the data under a single unit, making the fields in a class private to hiddden and prevent access directly, keep safe from from outside interference and misuse.
 
@@ -81,7 +96,7 @@ console.log(person.firstName); // Error
 console.log(person.getFullName()); // Thang Cao
 ```
 
-## Inheritance:
+## **Inheritance**:
 
 -   Inheritance is a mechanism where you can to derive a class from another class for a hierarchy of classes that share a set of attributes and methods.
 
@@ -122,7 +137,7 @@ const student = new Student('John', 'Doe');
 console.log(student.getFullName()); // John Doe
 ```
 
-# Polymorphism:
+## **Polymorphism**:
 
 -   Polymorphism is the ability of an entity to take on many forms.
 
@@ -158,7 +173,7 @@ const redisRepository: ProductRepository = new RedisRepository();
 cat.getProducts();
 ```
 
-## Abstraction:
+## **Abstraction**:
 
 -   Abstraction is a concept that aims to expose only high-level details of functionalities for the users and hiding all the background/implementation details.
 
@@ -209,15 +224,15 @@ const redisProductRepository: BaseProductRepository = new RedisProductRepository
 const productService = new ProductService(redisProductRepository);
 ```
 
-# Functional Programming:
+# **Functional Programming**:
 
-## Immutable and Architecture:
+## **Immutable and Architecture**:
 
 All race conditions, deadlocks and concurrent update problems are caused due to mutable variables. As an architect, understanding how and when immutability is practicable is a powerful tool to build programs that are robust under concurrency.
 
 The core idea of functional programming is to rely less on polymorphism and loops but instead uses higher-order function for abstraction such as map, filter and reduce functions for iteration.
 
-## Different between Mutable and Immutable?:
+## **Different between Mutable and Immutable**?
 
 **What is Mutable?**
 
@@ -227,7 +242,9 @@ The core idea of functional programming is to rely less on polymorphism and loop
 
 > Everything in OOP is mutable. Because in OOP, methods can change attributes of that object/class directly and always return the mutable object, so the biggest disadvantage of OOP is side-effect. Side-effect will be a nightmare if we don't control it well.
 
-**Example**: Imagine your company has built MutableResponse class:
+**Example**:
+
+Imagine your company has built MutableResponse class:
 
 ```typescript
 class MutableResponse {
@@ -354,11 +371,11 @@ const doSomething = (price, response) => {
 }
 ```
 
-## What is Functional Programing:
+## **What is Functional Programming**?
 
-Functional programing allow us to pass multiple adjacent functions (Ex: response.map().filter()) and for each implement those function, it **will create a new object**.
+-   Functional programing allow us to pass multiple adjacent functions (Ex: response.map().filter()) and for each implement those function, it **will create a new object**.
 
-## Why use Functional Programing?
+## **Why use Functional Programming**?
 
 -   By passing a multiple adjacent functions for object, it help our code more readable, more declarative.
 -   Return new object whenever implement function, keep the original object not modify, prevent the side-effect that OOP does

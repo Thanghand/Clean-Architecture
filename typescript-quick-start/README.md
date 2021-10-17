@@ -1,4 +1,4 @@
-# Summary
+# **Summary**
 
 -   [Introduction](#introduction)
 -   [Compare typescript vs es6](#compare-typescript-vs-es6)
@@ -14,7 +14,7 @@
         -   [Interface](#interface)
 -   [Link document](#link-document)
 
-## Introduction:
+## **Introduction**:
 
 -   TypeScript is a super set of JavaScript. It follows JavaScript syntactically but adds more features to it.
 
@@ -24,7 +24,7 @@
 
 -   TypeScript is an open-source object-oriented programing language that builds on top of JavaScript. It works on any browser, any OS, any environment that JavaScript runs.
 
-## Compare Typescript vs ES6:
+## **Compare Typescript vs ES6**:
 
 |                   | TypeScript                                                            | ES6               |
 | ----------------- | --------------------------------------------------------------------- | ----------------- |
@@ -35,9 +35,9 @@
 | Generics          | Yes                                                                   | No                |
 | Enums             | Yes                                                                   | No                |
 
-## Declaration:
+## **Declaration**:
 
-### Variable:
+### **Variable**:
 
 -   **Number**: All numbers in TypeScript are either floating-point values or big integers. The floating-point numbers have the type **number** while the big integers get the type **bigint**
 
@@ -55,11 +55,11 @@ const bigInteger: bigint = 9007199254740991n;
     TypeScript uses double quotes (") or single quotes (') to surround string
     We can use **backtick** (`) to implement multiline string and string interpolation (string literals)
 
-Example:
+**Example**:
 
 ```typescript
 const name: string = 'Thang';
-const role: string = 'Software Architechture';
+const role: string = 'Software Architecture';
 const multiline: string = `Hello
 world
 `;
@@ -103,13 +103,13 @@ let vacant: {} = {};
 
 -   **Array**: A TypeScript **array** is an ordered list of data.
 
-Syntax:
+**Syntax**:
 
 ```typescript
 let arrayName: type[];
 ```
 
-Example:
+**Example**:
 
 ```typescript
 let fruits: string[] = ['banana', 'apple', 'orage'];
@@ -130,7 +130,7 @@ const banana = fruits.map((fruit) => fruit === 'banana');
 const mixedArray: (string | number) = ['Hello', 4, 'World', 6];
 ```
 
-### Function:
+### **Function**:
 
 -   TypeScript functions are the building blocks of readable, maintainable, and reusable code.
 
@@ -155,7 +155,7 @@ const result = add('1', 2);
 console.log(result); // Error: we cant pass string in number type in paramter
 ```
 
-### Class:
+### **Class**:
 
 Example:
 
@@ -177,9 +177,9 @@ class Person {
 const person = new Person('Thang', 'Cao');
 ```
 
-### Access Modifier:
+### **Access Modifier**:
 
--   Access modifiers change the visibility of the properties and methods of a class. TypeScript provides three access modifiers:
+-   **Access modifiers** change the visibility of the properties and methods of a class. TypeScript provides three access modifiers:
 
 -   **private**: The private modifier limits the visibility to the same-class only.
 
@@ -274,7 +274,7 @@ console.log(person.birthDate); // Fri Jan 25 1991 00:00:00 GMT+0700 (Indochina T
 person.birthDate = new Date(1991, 12, 25); // Compile error
 ```
 
-### Define constructor:
+### **Define constructor**:
 
 -   Default constructor:
 
@@ -311,11 +311,11 @@ class Person {
 }
 ```
 
-### Getters and Setters:
+### **Getters and Setters**:
 
-A getter method returns the value of the property’s value. A getter is also called an accessor.
+-   A getter method returns the value of the property’s value. A getter is also called an accessor.
 
-A setter method updates the property’s value. A setter is also known as a mutator.
+-   A setter method updates the property’s value. A setter is also known as a mutator.
 
 ```typescript
 class Person {
@@ -340,9 +340,7 @@ class Person {
 }
 ```
 
-### Inheritance
-
-### Abstract
+### **Abstract**
 
 -   An **abstract class** is typically used to define common behaviors for derived classes to extend. Unlike a regular class, an abstract class cannot be instantiated directly.
 
@@ -385,7 +383,7 @@ class Contractor extends Employee {
 }
 ```
 
-### Interface:
+### **Interface**:
 
 -   TypeScript **interfaces** define the contracts within your code. They also provide explicit names for type checking.
 
@@ -395,7 +393,7 @@ class Contractor extends Employee {
 
 -   Interfaces are typically used as class types that make a contract between unrelated classes.
 
-Example 1:
+Example:
 
 ```typescript
 interface IPerson {
@@ -415,9 +413,7 @@ let john: IPerson = {
 console.log(getFullName(john)); // John Doe
 ```
 
-Example 2:
-
-**Optional properties**
+**_Optional properties_**
 
 ```typescript
 interface Person {
@@ -441,9 +437,7 @@ let john: IPerson = {
 console.log(getFullName(john)); // John Kean Doe
 ```
 
-Example 3:
-
-**Readonly properties**
+**_Readonly properties_**
 
 ```typescript
 interface IPerson {
@@ -462,6 +456,6 @@ person = {
 person.id = 4; // Error
 ```
 
-# Link Document:
+# **Link Document**:
 
 > https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html

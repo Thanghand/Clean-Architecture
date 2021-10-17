@@ -1,20 +1,30 @@
+# **Summary**
 
-# What is architecture ?
+-   [What is Architecture ?](#what-is-architecture)
+-   [Clean Architecture](#clean-architecture)
+    -   [Entity (Domain Centric)](#entity-domain-centric)
+    -   [Use Case](#use-case)
+    -   [Domain Service](#domain-service)
+    -   [Infrastructure](#infrastructure)
+-   [Another Architectures](#another-architectures)
 
+# **What is Architecture**?
 
-# Clean Architecture
+# **Clean Architecture**
 
+## **Entity (Domain Centric)**
 
+-   **Entity** is a normal model/domain class.
 
-# Entity (Domain Centric)
-- Entity is a normal model/domain class
-- Normally, we think model/domain class actually only have data attributes and some get set functions.
-- Uncle Bob does not want entity to be a simple model class. He want entity should be a model/domain centric.
-- Domain Centric is not only a class which contain the data attributes, but it also take care the behaviors logic of the business. It manages state data of the model.
+-   Normally, we think model/domain class actually only have data attributes and some get set functions.
 
-For example:
+-   Uncle Bob does not want entity to be a simple model class. He want entity should be a model/domain centric.
 
-```
+-   **Domain Centric** is not only a class which contain the data attributes, but it also take care the behaviors logic of the business. It manages state data of the model.
+
+**Example**:
+
+```typescript
 export interface ProductProps {
     // Define data here
     id: string;
@@ -38,7 +48,7 @@ export class Product extend Entity {
     }
 
     public static create(props): Result<Product> {
-        // Validate 
+        // Validate
 
         // Check logic
     }
@@ -76,7 +86,7 @@ export class Product extend Entity {
     }
 
     public addNewSku(sku: ProductSku): Result<void> {
-        // Implement logic here 
+        // Implement logic here
         ...
         return Result.ok();
     }
@@ -88,25 +98,29 @@ export class Product extend Entity {
     }
 
     ...
-    // More functions 
+    // More functions
 }
 ```
-## Conclusion
+
+### **Conclusion**
+
     - Every public functions are represent for every behavior logic of the business
     - Easy to write unit test without mocking
     - Easy to understand overview of the business
 
-# UseCase
+## **Use Case**
 
-What is the use cases ? 
-- Use case look like the domain service
-- What is domain service ? Domain Service is the class interact on entity and infrastructure (database, messageQueue, or another services).
+What is **Use Cases** ?
 
-## Domain Service
+-   Use case look like the **Domain Service.**
 
-For example:
+-   What is **Domain Service** ? **Domain Service** is the class interact on entity and **Infrastructure** (Database, Message Queue, ...).
 
-```
+## **Domain Service**
+
+**Example**:
+
+```typescript
 export class ProductService implements IProductService {
     constructor (@Inject() private readonly productRepository: IProductRepository,
         @Inject() private readonly eventPublisher: IEventPublisher,
@@ -153,27 +167,33 @@ export class ProductService implements IProductService {
     }
 
     ...
-    // More functions 
+    // More functions
 }
 ```
 
-What are problems of domain service ?
+What are problems of **Domain Service** ?
 
-- When using for specific logic, we have to inject unrelated instances object (ISP)
-- Big injections for multiple logic
-- Merge conflict when having some developers are working on the same service
-- Reading the code will become harder when domain service is become bigger
-- All the unit test case fails when pulling code from Git
-- When the file domain service is really big, git tools cannot open this file. Maybe you have to use the terminal to view the changed of the file. However, the terminals does not have a good UI to see => Your eyes will blow up.
+-   When using for specific logic, we have to inject unrelated instances object (ISP).
 
-How can we solve thees problems ? 
-=> The Interface Segregation Principle (ISP)
+-   Big injections for multiple logic.
+
+-   Merge conflict when having some developers are working on the same service.
+
+-   Reading the code will become harder when domain service is become bigger.
+
+-   All the unit test case fails when pulling code from Git.
+
+-   When the file domain service is really big, git tools cannot open this file. Maybe you have to use the terminal to view the changed of the file. However, the terminals does not have a good UI to see => Your eyes will blow up.
+
+**How can we solve these problems ?**
+
+=> The **_Interface Segregation Principle (ISP)_**
 
 Split every behavior logic to every file
 
-For example:
+**For example:**
 
-```
+```typescript
 export class CreateProductUseCase extends UseCase<CreateProductInput, string> implement IUseCaseHandler {
 
     constructor(@Inject() productRepository: IProductRepository, @Inject() userService: IUserService)
@@ -187,21 +207,24 @@ export class CreateProductUseCase extends UseCase<CreateProductInput, string> im
 }
 
 ```
-## Conclusion
-Following the example, you probably understand the meaning of UseCase
-Every useCase have their own boundary.
 
-# Adapter
-To understand Adapter layer, you have to understand Adapter Pattern.
+### **_Conclusion_**
+
+-   Following the example, you probably understand the meaning of **Use Case**
+-   Every **Use Case** have their own boundary.
+
+## **Adapter**
+
+To understand **Adapter** layer, you have to understand **Adapter Pattern.**
 
 "Client" => "Adapter" => Adaptee
 Adapter: Controller, Presenter, Gateways
 
-Example:
+**Example**:
 
-Api Express controller
+**_Api Express controller_**
 
-```
+```typescript
 @Controller('/products)
 export class ProductController {
     constructor(private readonly createProductUseCase: CreateProductUseCase) {
@@ -220,9 +243,9 @@ export class ProductController {
 }
 ```
 
-Lambda Handler
+**_Lambda Handler_**
 
-```
+```typescript
 export const createProductHandler = (event) => {
 
     // Validate event
@@ -240,26 +263,24 @@ export const createProductHandler = (event) => {
 }
 ```
 
-# Infrastructure
+## **Infrastructure**
 
 This layer is where all the I/O components go: the UI, database, frameworks, devices, etc. It’s the most volatile layer. Since the things in this layer are so likely to change, they are kept as far away as possible from the more stable domain layers. Because they are kept separate, it’s relatively easy make changes or swap one component for another.
 
 => Clean Architecture is applying DIP (Dependency Inversion Principle)
-"Abstractions should not depend upon details. Details should depend on abstractions" 
-    - Entity layer doesn't depend on UseCase layer, but UseCase depend on Entity
-    - UseCase layer doesn't depend on Adapter layer, but Adapter depend on UseCase
-    - Adapter layer doesn't depend on Infrastructure, but Infrastructure depend on Adapter
+"Abstractions should not depend upon details. Details should depend on abstractions" - Entity layer doesn't depend on UseCase layer, but UseCase depend on Entity - UseCase layer doesn't depend on Adapter layer, but Adapter depend on UseCase - Adapter layer doesn't depend on Infrastructure, but Infrastructure depend on Adapter
 
 => Decoupling for every layers
 
-# Another architectures
+# **Another Architectures**
 
-- Hexagonal Architecture (a.k.a. Ports and Adapters) by Alistair Cockburn and adopted by Steve Freeman, and Nat Pryce in their wonderful book Growing Object Oriented Software
-- Onion Architecture by Jeffrey Palermo
-- Screaming Architecture from a blog of mine last year
+-   Hexagonal Architecture (a.k.a. Ports and Adapters) by Alistair Cockburn and adopted by Steve Freeman, and Nat Pryce in their wonderful book Growing Object Oriented Software
+-   Onion Architecture by Jeffrey Palermo
+-   Screaming Architecture from a blog of mine last year
 
+Though these architectures all vary somewhat in their details, they are very similar. They all have the same objective, which is the separation of concerns.
 
-Though these architectures all vary somewhat in their details, they are very similar. They all have the same objective, which is the separation of concerns. They all achieve this separation by dividing the software into layers. Each has at least one layer for business rules, and another for interfaces.
+They all achieve this separation by dividing the software into layers. Each has at least one layer for business rules, and another for interfaces.
 
 Each of these architectures produce systems that are:
 
@@ -268,6 +289,5 @@ Each of these architectures produce systems that are:
     3. Independent of UI. The UI can change easily, without changing the rest of the system. A Web UI could be replaced with a console UI, for example, without changing the business rules.
     4. Independent of Database. You can swap out Oracle or SQL Server, for Mongo, BigTable, CouchDB, or something else. Your business rules are not bound to the database.
     6. Independent of any external agency. In fact your business rules simply don’t know anything at all about the outside world.
-
 
 The diagram at the top of this article is an attempt at integrating all these architectures into a single actionable idea.
