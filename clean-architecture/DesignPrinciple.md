@@ -82,7 +82,7 @@ class IT extends Employee {}
 
 => Much better. Each employee in this social structure has a single place where we can go to in order adjust their respective algorithm that is most likely to change.
 
-## **Conclusion**
+### **Conclusion**
 
 A module only has **ONE** reason to change. Problems occur because we put code that different actors depend on into close proximity. The **SRP** says to separate the code that different actors depend on.
 
