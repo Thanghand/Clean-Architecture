@@ -1,7 +1,7 @@
 # **Summary**
 
 -   [Introduction](#introduction)
--   [Compare typescript vs es6](#compare-typescript-vs-es6)
+-   [Compare Typescript vs ES6](#compare-typescript-vs-es6)
 -   [Declarations](#declaration):
     -   [Variable](#variable)
     -   [Function](#function)
