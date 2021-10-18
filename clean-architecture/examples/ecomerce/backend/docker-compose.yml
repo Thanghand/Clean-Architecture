@@ -14,20 +14,20 @@ services:
     volumes:
       - "mongodb-data:/data/db"
 
-  mysql:
-    platform: linux/x86_64
-    image: mysql:5.7
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - app-network
+  # mysql:
+  #   platform: linux/x86_64
+  #   image: mysql:5.7
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: test
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   networks:
+  #     - app-network
   
   api-product-catalog:
     image: api-product-catalog
