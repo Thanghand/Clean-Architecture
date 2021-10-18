@@ -1,6 +1,5 @@
 # **Summary**
 
--   [What is Architecture ?](#what-is-architecture)
 -   [Clean Architecture](#clean-architecture)
     -   [Entity (Domain Centric)](#entity-domain-centric)
     -   [Use Case](#use-case)
@@ -8,9 +7,11 @@
     -   [Infrastructure](#infrastructure)
 -   [Another Architectures](#another-architectures)
 
-# **What is Architecture**?
-
 # **Clean Architecture**
+
+<p align="center">
+  <img src="images/clean-architecture.png" />
+</p>
 
 ## **Entity (Domain Centric)**
 
@@ -225,18 +226,17 @@ Adapter: Controller, Presenter, Gateways
 **_Api Express controller_**
 
 ```typescript
-@Controller('/products)
+@Controller('/products')
 export class ProductController {
-    constructor(private readonly createProductUseCase: CreateProductUseCase) {
-    }
+    constructor(private readonly createProductUseCase: CreateProductUseCase) {}
 
     @Post()
     async create(request): Promise<string> {
         const input: CreateUseCaseInput = {
             // transform request here
             name: request.name,
-            image: request.image
-        }
+            image: request.image,
+        };
         const response = await this.createProductUseCase.execute(input);
         return response;
     }
@@ -275,8 +275,12 @@ This layer is where all the I/O components go: the UI, database, frameworks, dev
 # **Another Architectures**
 
 -   Hexagonal Architecture (a.k.a. Ports and Adapters) by Alistair Cockburn and adopted by Steve Freeman, and Nat Pryce in their wonderful book Growing Object Oriented Software
+    ![hexagonal-architecture](images/hexagonal-architecture.png)
+
 -   Onion Architecture by Jeffrey Palermo
--   Screaming Architecture from a blog of mine last year
+<div align="center">
+    <img src="images/onion-architecture.jpeg" />
+</div>
 
 Though these architectures all vary somewhat in their details, they are very similar. They all have the same objective, which is the separation of concerns.
 
