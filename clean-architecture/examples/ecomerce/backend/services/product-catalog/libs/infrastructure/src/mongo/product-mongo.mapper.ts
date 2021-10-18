@@ -17,10 +17,15 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                 quantity: ProductQuantity.create(persistenceModel.quantity).getValue(),
                 description: ProductDescription.create(persistenceModel.description).getValue(),
                 views: persistenceModel.views,
-                skus: ProductSkus.create(persistenceModel.skus.map(sku => ProductSku.create({
-                    image: sku.image,
-                    description: ProductDescription.create(sku.description).getValue()
-                }).getValue())).getValue(),
+                skus: ProductSkus.create(persistenceModel.skus.map(s => {
+                    const sku = ProductSku.create({
+                        image: s.image,
+                        description: ProductDescription.create(s.description).getValue()
+                    }, s._id).getValue();
+                    sku.createdAt = s.createdAt;
+                    sku.updatedAt = s.updateAt;
+                    return sku;
+                })).getValue(),
                 status: ProductStatus.create(persistenceModel.status).getValue(),
                 discountPercent: DiscountPercent.create(persistenceModel.discountPercent).getValue()
             }
@@ -60,8 +65,11 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                 description: description.value,
                 views: views,
                 skus: skus.value.map(sku => ({
+                    _id: sku.id,
                     image: sku.props.image,
-                    description: sku.props.description.value
+                    description: sku.props.description.value,
+                    createdAt: sku.createdAt,
+                    updateAt: sku.updatedAt
                 })),
                 status: status.value,
                 discountPercent: discountPercent.value,

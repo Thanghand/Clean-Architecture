@@ -7,18 +7,18 @@ import {
     writeFileSync
 } from 'fs';
 
-// const app = {
-//     name: 'core',
-//     packageName: 'company-core',
-//     version: '0.0.1',
-//     directory: './libs/core',
-//     rootDirectory: '.',
-//     destinationApps: [
-//     ],
-//     exclusionApps: [
-//     ],
-//     isLocal: true,
-// }
+const app = {
+    name: 'core',
+    packageName: 'company-core',
+    version: '0.0.1',
+    directory: './libs/core',
+    rootDirectory: '.',
+    destinationApps: [
+    ],
+    exclusionApps: [
+    ],
+    isLocal: true,
+}
 
 // const app = {
 //     name: 'plugin-mongo',
@@ -35,20 +35,20 @@ import {
 //     isLocal: true,
 // }
 
-const app = {
-    name: 'plugin-mysql',
-    packageName: 'plugin-mysql',
-    version: '0.0.1',
-    directory: './libs/plugin-mysql',
-    rootDirectory: '.',
-    destinationApps: [
-        // 'plugin-mongo',
-    ],
-    exclusionApps: [
-        'core', 'plugin-mongo'
-    ],
-    isLocal: true,
-}
+// const app = {
+//     name: 'plugin-mysql',
+//     packageName: 'plugin-mysql',
+//     version: '0.0.1',
+//     directory: './libs/plugin-mysql',
+//     rootDirectory: '.',
+//     destinationApps: [
+//         // 'plugin-mongo',
+//     ],
+//     exclusionApps: [
+//         'core', 'plugin-mongo'
+//     ],
+//     isLocal: true,
+// }
 
 const buildPackage = async (directory, version) => {
     const commandLine = `cd ${directory}; npm run build ; npm pack`;
@@ -138,7 +138,7 @@ const handler = async () => {
                 } else {
                     if (app.isLocal) {
                         const packageJson = JSON.parse(readFileSync(`${path}/package.json`, 'utf8'));
-                        if (packageJson.name !== app.packageName || !app.exclusionApps.includes(subDirectory)) {
+                        if (packageJson.name !== app.packageName && !app.exclusionApps.includes(subDirectory)) {
                             if (!existsSync(`${path}/__npm-registry__`)) {
                                 await command.run(`mkdir ${path}/__npm-registry__`);
                             }

@@ -33,6 +33,31 @@ describe('ProductSkus', () => {
 
             expect(skusOrError.isFailure).toEqual(true);
         });
+
+        it('should create failed when the value of skus has some duplicated item', () => {
+            const value: ProductSku[] = [
+                ProductSku.create({
+                    image: 'https://company.com/products/images/3123131313',
+                    description: ProductDescription.create(`
+                        Product details of IPHONE 6
+                        Freshness Promise
+                        Delivered at least 6 Days before it expires (including delivery day), or you can get a refund.
+                        If you are not satisfied with this product in any way, please contact us and we'll give you a refund. Find out more about our freshness promise.
+                    `).getValue()
+                }, '123').getValue(),
+                ProductSku.create({
+                    image: 'https://company.com/products/images/3123131313',
+                    description: ProductDescription.create(`
+                        Product details of IPHONE 6
+                        Freshness Promise
+                        Delivered at least 6 Days before it expires (including delivery day), or you can get a refund.
+                        If you are not satisfied with this product in any way, please contact us and we'll give you a refund. Find out more about our freshness promise.
+                    `).getValue()
+                }, '123').getValue()
+            ];
+            const skusOrError = ProductSkus.create(value);
+            expect(skusOrError.isFailure).toEqual(true);
+        });
     });
 
     describe('addNewSku', () => {
@@ -120,14 +145,24 @@ describe('ProductSkus', () => {
                         Dietary Needs
                         Healthier Choice
                     `).getValue()
-                }, '123').getValue()
+                }, '123').getValue(),
+                ProductSku.create({
+                    image: 'https://company.com/products/images/3123131313',
+                    description: ProductDescription.create(`
+                        Product details of Note 10
+                        Freshness Promise
+                        fresh milk.Pasteurised and homogenised. Contains all the natural goodness of fresh cow’s milk with a superior taste
+                        Dietary Needs
+                        Healthier Choice
+                    `).getValue()
+                }, '789').getValue()
             ];
             skus = ProductSkus.create(value).getValue();
         });
 
         it('should update successfully when sku is valid and exist', () => {
             const sku = ProductSku.create({
-                image: 'https://company.com/products/images/3123131313',
+                image: 'https://company.com/products/images/iphone12',
                 description: ProductDescription.create(`
                     Product details of IPHONE 12
                     Freshness Promise
@@ -144,7 +179,7 @@ describe('ProductSkus', () => {
             const result = skus.updateSku(sku);
 
             expect(result.isSuccess).toEqual(true);
-            expect(skus.value.find(s => s.id === sku.id)).toStrictEqual(sku);
+            expect(skus.value.find(s => s.id === sku.id).props).toStrictEqual(sku.props);
         });
 
         it('should update failed when sku is not existed', () => {

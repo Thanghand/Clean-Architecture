@@ -17,8 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@nestjs/common": "^7.6.15",
-    "uuid": "^8.3.2",
-    "plugin-mysql": "file:./__npm-registry__/plugin-mysql-0.0.1.tgz"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "tslint-config-airbnb": "^5.11.2",

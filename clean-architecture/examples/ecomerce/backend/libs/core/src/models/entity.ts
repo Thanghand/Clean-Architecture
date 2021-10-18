@@ -1,3 +1,4 @@
+import { Result } from 'src/functional';
 import { v4 as uuid } from 'uuid';
 
 export abstract class Entity<Props = unknown> {
@@ -16,7 +17,7 @@ export abstract class Entity<Props = unknown> {
     return this._id;
   }
 
-  public update() {
+  public update(): void {
     this.updatedAt = Date.now().toString();
   }
 

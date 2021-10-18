@@ -1,8 +1,11 @@
 import { SchemaFactory, Prop, Schema, MongoDocumentProps, MongoDocument} from "plugin-mongo";
 
 export class ProductSkuSubDocument {
+    _id: string;
     image: string;
     description: string;
+    updateAt: string;
+    createdAt: string;
 }
 
 export interface ProductMongoDocumentProps extends MongoDocumentProps{

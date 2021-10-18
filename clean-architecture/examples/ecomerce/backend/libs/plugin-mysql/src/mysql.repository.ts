@@ -1,8 +1,8 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { BaseRepo, Entity, Mapper, Result } from "company-core";
-import { BaseEntity, Repository } from 'typeorm';
+import { BaseEntity, ObjectLiteral, Repository } from 'typeorm';
 
-export class MySqlRepository<EntityTable extends BaseEntity, Domain extends Entity> implements BaseRepo<Domain> {
+export class MySqlRepository<EntityTable extends ObjectLiteral, Domain extends Entity> implements BaseRepo<Domain> {
 
     constructor(protected readonly mapper: Mapper,
         private entityRepo: Repository<EntityTable>) {

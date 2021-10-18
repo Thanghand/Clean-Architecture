@@ -2,6 +2,7 @@ import { ProductResponse } from "@lib/core/dtos/product.response";
 import { SkuDto } from "@lib/core/dtos/sku.dto";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
+import { SkuResponseDoc } from "./sku-response.doc";
 import { SkuDoc } from "./sku.doc";
 
 export class ProductResponseDoc extends ProductResponse {
@@ -55,7 +56,7 @@ export class ProductResponseDoc extends ProductResponse {
     updatedAt: string;
 
     @ApiProperty({
-        type: SkuDoc
+        type: [SkuResponseDoc]
     })
-    skus: SkuDto[];
+    skus: SkuDoc[];
 }

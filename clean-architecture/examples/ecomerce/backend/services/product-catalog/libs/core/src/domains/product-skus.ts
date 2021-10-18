@@ -16,6 +16,16 @@ export class ProductSkus {
         if (!guardResult.succeeded) {
             return Result.fail(guardResult.message);
         }
+        if (value.length !== 0) {
+            const defaultSkus = ProductSkus.create([]).getValue();
+            for (const sku of value) {
+                const resultOrError = defaultSkus.addNewSku(sku);
+                if (resultOrError.isFailure) {
+                    return Result.fail(resultOrError.error);
+                }
+            }
+        }
+
         return Result.ok(new ProductSkus(value));
     }
 
@@ -37,14 +47,12 @@ export class ProductSkus {
         if (!result.succeeded) {
             return Result.fail(result.message);
         }
-        const isSkuNotExisted = this._value.find(s => s.id === sku.id) === undefined;
+        const foundSku = this._value.find(s => s.id === sku.id);
+        const isSkuNotExisted = foundSku === undefined;
         if (isSkuNotExisted) {
             return Result.fail('Sku is not existed');
         }
-
-        const newSkus = this._value.filter(s => s.id !== sku.id);
-        newSkus.push(sku);
-        this._value = newSkus;
+        foundSku.updateSku(sku);
         return Result.ok();
     }
 
