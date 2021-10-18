@@ -1,5 +1,5 @@
 {
-  "name": "company-core",
+  "name": "plugin-mysql",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,10 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "@nestjs/common": "^7.6.15",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "tslint-config-airbnb": "^5.11.2",
-    "typescript-tslint-plugin": "^1.0.1"
+    "@nestjs/typeorm": "^8.0.2",
+    "company-core": "file:./__npm-registry__/company-core-0.0.1.tgz",
+    "mysql2": "^2.3.2",
+    "typeorm": "^0.2.38"
   }
 }

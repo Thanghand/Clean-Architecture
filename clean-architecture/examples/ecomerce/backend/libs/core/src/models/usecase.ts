@@ -1,4 +1,4 @@
-import { Result } from './functional';
+import { Result } from '../functional';
 
 export abstract class UseCase<Input, OutPut> {
 

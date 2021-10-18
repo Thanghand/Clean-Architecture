@@ -1,0 +1,41 @@
+
+version: '3.0'
+services:
+  mongodb:
+    image: mongo:4.4.1
+    container_name: local-mongodb
+    restart: always
+    networks:
+      - app-network
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongodb-data:/data/db"
+  
+  api-product-catalog:
+    image: api-product-catalog
+    container_name: api-product-catalog
+    build:
+      context: ./services/product-catalog
+      dockerfile: Dockerfile
+      args:
+        - app=api-product-catalog
+    depends_on:
+      - mongodb
+    ports:
+      - 3000:3000
+      - 6000:9000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
+    
+volumes:
+  mongodb-data:
+    name: local-mongdb-data
+    driver: local

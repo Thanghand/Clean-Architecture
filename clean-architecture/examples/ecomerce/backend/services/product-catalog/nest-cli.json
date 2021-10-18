@@ -1,0 +1,57 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/api-product-catalog/src",
+  "monorepo": true,
+  "root": "apps/api-product-catalog",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/api-product-catalog/tsconfig.app.json"
+  },
+  "projects": {
+    "product-catalog": {
+      "type": "application",
+      "root": "apps/api-product-catalog",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-product-catalog/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-product-catalog/tsconfig.app.json"
+      }
+    },
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
+    "infrastructure": {
+      "type": "library",
+      "root": "libs/infrastructure",
+      "entryFile": "index",
+      "sourceRoot": "libs/infrastructure/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/infrastructure/tsconfig.lib.json"
+      }
+    },
+    "grapql-product-catalog": {
+      "type": "application",
+      "root": "apps/grapql-product-catalog",
+      "entryFile": "main",
+      "sourceRoot": "apps/grapql-product-catalog/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/grapql-product-catalog/tsconfig.app.json"
+      }
+    },
+    "aws-api-product-catalog": {
+      "type": "application",
+      "root": "apps/aws-api-product-catalog",
+      "entryFile": "main",
+      "sourceRoot": "apps/aws-api-product-catalog/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/aws-api-product-catalog/tsconfig.app.json"
+      }
+    }
+  }
+}

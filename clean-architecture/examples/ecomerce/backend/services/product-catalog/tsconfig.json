@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@lib/core": [
+        "libs/core/src"
+      ],
+      "@lib/core/*": [
+        "libs/core/src/*"
+      ],
+      "@lib/infrastructure": [
+        "libs/infrastructure/src"
+      ],
+      "@lib/infrastructure/*": [
+        "libs/infrastructure/src/*"
+      ]
+    }
+  }
+}
