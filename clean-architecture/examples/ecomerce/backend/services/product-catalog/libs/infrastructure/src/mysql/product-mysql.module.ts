@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "plugin-mysql";
 import { ProductMysqlMapper } from "./product-mysql.mapper";
-import { productMysqlRepoProvider, ProductMySqlRepository } from "./product-mysql.repository";
+import { productMysqlRepoProvider } from "./product-mysql.repository";
 import { ProductSkuMysqlMapper } from "./product-sku-mysql.mapper";
 import { ProductSkuTable } from "./product-sku.table";
 import { ProductTable } from "./product.table";
