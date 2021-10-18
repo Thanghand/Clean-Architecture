@@ -12,6 +12,6 @@ import { ProductController } from './controllers';
   controllers: [ProductController],
   providers: [
     ...useCases
-  ],
+  ]
 })
 export class AppModule { }
