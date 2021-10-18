@@ -1,7 +1,7 @@
 import { Inject } from "@nestjs/common";
 import { ApiError, Result, UseCase } from "company-core";
 import { SkuDto } from "../dtos/sku.dto";
-import { ProductSku, ProductDescription } from "../entities";
+import { ProductSku, ProductDescription } from "../domains";
 import { PRODUCT_REPOSITORY, IProductRepository } from "../repositories";
 
 export class UpdateSkuUseCaseInput {

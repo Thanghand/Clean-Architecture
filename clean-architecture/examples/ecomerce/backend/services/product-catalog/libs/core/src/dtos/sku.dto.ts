@@ -1,4 +1,4 @@
-import { ProductSku } from "../entities";
+import { ProductSku } from "../domains";
 
 export class SkuDto {
     image: string;

@@ -1,4 +1,4 @@
-import { Product } from "@lib/core/entities";
+import { Product } from "@lib/core/domains";
 import { IProductRepository } from "@lib/core/repositories";
 import { Result } from "company-core";
 

@@ -1,7 +1,7 @@
 import { Inject } from "@nestjs/common";
 import { ApiError, Result, UseCase } from "company-core";
 import { UpdateProductDto } from "../dtos/update-product.dto";
-import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductQuantity } from "../entities";
+import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductQuantity } from "../domains";
 import { PRODUCT_REPOSITORY, IProductRepository } from "../repositories";
 
 export class UpdateProductUseCaseInput {

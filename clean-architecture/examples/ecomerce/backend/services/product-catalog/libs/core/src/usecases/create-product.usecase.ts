@@ -3,8 +3,8 @@ import { ApiError, Result, UseCase } from 'company-core';
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { ProductResponse } from '../dtos/product.response';
 import { SkuDto } from '../dtos/sku.dto';
-import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductProps, ProductQuantity, ProductSku } from '../entities';
-import { ProductSkus } from '../entities/product-skus';
+import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductProps, ProductQuantity, ProductSku } from '../domains';
+import { ProductSkus } from '../domains/product-skus';
 import { IProductRepository, PRODUCT_REPOSITORY } from '../repositories';
 
 export class CreateProductUseCaseInput {

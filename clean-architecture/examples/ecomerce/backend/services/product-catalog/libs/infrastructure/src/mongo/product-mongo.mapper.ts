@@ -1,5 +1,5 @@
-import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductProps, ProductQuantity, ProductSku, ProductStatus } from "@lib/core/entities";
-import { ProductSkus } from "@lib/core/entities/product-skus";
+import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductProps, ProductQuantity, ProductSku, ProductStatus } from "@lib/core/domains";
+import { ProductSkus } from "@lib/core/domains/product-skus";
 import { Injectable } from "@nestjs/common";
 import { Mapper } from "company-core";
 import { ProductMongoDocumentProps } from "./product-mongo.schema";

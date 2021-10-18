@@ -1,4 +1,4 @@
-import { Product } from "../entities";
+import { Product } from "../domains";
 import { SkuDto } from "./sku.dto";
 
 export class ProductResponse {
