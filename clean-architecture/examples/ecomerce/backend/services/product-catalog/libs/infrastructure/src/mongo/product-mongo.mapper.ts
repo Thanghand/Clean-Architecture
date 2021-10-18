@@ -23,7 +23,7 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                         description: ProductDescription.create(s.description).getValue()
                     }, s._id).getValue();
                     sku.createdAt = s.createdAt;
-                    sku.updatedAt = s.updateAt;
+                    sku.updatedAt = s.updatedAt;
                     return sku;
                 })).getValue(),
                 status: ProductStatus.create(persistenceModel.status).getValue(),
@@ -69,7 +69,7 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                     image: sku.props.image,
                     description: sku.props.description.value,
                     createdAt: sku.createdAt,
-                    updateAt: sku.updatedAt
+                    updatedAt: sku.updatedAt
                 })),
                 status: status.value,
                 discountPercent: discountPercent.value,

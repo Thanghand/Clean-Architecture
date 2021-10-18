@@ -19,7 +19,6 @@ export class CreateProductUseCase extends UseCase<CreateProductUseCaseInput, Pro
     }
 
     protected async buildUseCase(input: CreateProductUseCaseInput): Promise<Result<ProductResponse>> {
-
         const productOrError = this.validateToGetProduct(input);
         if (productOrError.isFailure) {
             return new ApiError.BadRequestError(productOrError.error);

@@ -4,7 +4,7 @@ export class ProductSkuSubDocument {
     _id: string;
     image: string;
     description: string;
-    updateAt: string;
+    updatedAt: string;
     createdAt: string;
 }
 

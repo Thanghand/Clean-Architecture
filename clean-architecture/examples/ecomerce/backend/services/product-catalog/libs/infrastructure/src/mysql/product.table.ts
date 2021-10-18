@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "plugin-mysql";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "plugin-mysql";
+import { ProductSkuTable } from "./product-sku.table";
 
 @Entity()
 export class ProductTable {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()
@@ -14,7 +15,7 @@ export class ProductTable {
 
     @Column()
     description: string;
-    
+
     @Column()
     image: string;
 
@@ -22,8 +23,23 @@ export class ProductTable {
     categoryId: string;
 
     @Column()
-    views:number;
+    views: number;
 
     @Column()
     discountPercent: number;
+
+    @Column()
+    price: number;
+
+    @Column()
+    status: string;
+
+    @Column()
+    createdAt: string;
+
+    @Column()
+    updatedAt: string;
+
+    @OneToMany(() => ProductSkuTable, sku => sku.product)
+    skus: ProductSkuTable[];
 }
