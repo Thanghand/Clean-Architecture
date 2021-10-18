@@ -4,7 +4,6 @@ import { ProductPrice } from "./product-price";
 import { DiscountPercent } from "./discount-percent";
 import { ProductQuantity } from "./product-quantity";
 import { ProductStatus } from "./product-status";
-import { ProductSku } from "./product-sku";
 import { ProductDescription } from "./product-description";
 import { ProductSkus } from "./product-skus";
 

@@ -1,6 +1,6 @@
 import { CreateProductDto } from "@lib/core/dtos/create-product.dto";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 import { SkuDoc } from "./sku.doc";
 
 export class CreateProductDoc extends CreateProductDto {
@@ -45,11 +45,13 @@ export class CreateProductDoc extends CreateProductDto {
         required: false
     })
     @IsNumber()
+    @IsOptional()
     discountPercent?: number;
 
     @ApiProperty({
         type: [SkuDoc],
         required: false
     })
+    @IsOptional()
     skus?: SkuDoc[];
 }

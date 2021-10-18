@@ -19,7 +19,7 @@ export class ProductController {
 
     @ApiBody({ type: CreateProductDoc })
     @Post()
-    async create(@Body() dto: CreateProductDoc): Promise<BodyResponse<void>> {
+    async create(@Body() dto: CreateProductDoc): Promise<BodyResponse<ProductResponseDoc>> {
         const input = new CreateProductUseCaseInput(dto);
         const result = await this.createProductUseCase.execute(input);
         return ResultMapper.toApiBodyResponse(result);

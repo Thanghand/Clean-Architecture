@@ -1,8 +1,10 @@
 import { Inject, Res } from '@nestjs/common';
 import { ApiError, Result, UseCase } from 'company-core';
 import { CreateProductDto } from '../dtos/create-product.dto';
+import { ProductResponse } from '../dtos/product.response';
 import { SkuDto } from '../dtos/sku.dto';
 import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductProps, ProductQuantity, ProductSku } from '../entities';
+import { ProductSkus } from '../entities/product-skus';
 import { IProductRepository, PRODUCT_REPOSITORY } from '../repositories';
 
 export class CreateProductUseCaseInput {
@@ -10,20 +12,15 @@ export class CreateProductUseCaseInput {
     }
 }
 
-export class CreateProductUseCase extends UseCase<CreateProductUseCaseInput, void> {
+export class CreateProductUseCase extends UseCase<CreateProductUseCaseInput, ProductResponse> {
 
     constructor(@Inject(PRODUCT_REPOSITORY) private readonly productRepository: IProductRepository) {
         super();
     }
 
-    protected async buildUseCase(input: CreateProductUseCaseInput): Promise<Result<void>> {
+    protected async buildUseCase(input: CreateProductUseCaseInput): Promise<Result<ProductResponse>> {
 
-        const propsOrError = this.validateToGetProductProps(input);
-        if (propsOrError.isFailure) {
-            return new ApiError.BadRequestError(propsOrError.error);
-        }
-
-        const productOrError = Product.create(propsOrError.getValue());
+        const productOrError = this.validateToGetProduct(input);
         if (productOrError.isFailure) {
             return new ApiError.BadRequestError(productOrError.error);
         }
@@ -34,10 +31,10 @@ export class CreateProductUseCase extends UseCase<CreateProductUseCaseInput, voi
         if (resultOrError.isFailure) {
             return new ApiError.BadRequestError(resultOrError.error);
         }
-        return Result.ok();
+        return Result.ok(ProductResponse.from(product));
     }
 
-    private validateToGetProductProps(input: CreateProductUseCaseInput): Result<ProductProps> {
+    private validateToGetProduct(input: CreateProductUseCaseInput): Result<Product> {
         const { dto } = input;
 
         const {
@@ -63,29 +60,37 @@ export class CreateProductUseCase extends UseCase<CreateProductUseCaseInput, voi
             descriptionOrError
         ];
 
-        if (skus) {
-            const productSkusOrError = skus.map(s => this.addSku(s));
-            validationCombine.push(...productSkusOrError);
+        const validateRequiredResult = Result.combine(validationCombine);
+        if (validateRequiredResult.isFailure) {
+            return new ApiError.BadRequestError(validateRequiredResult.error);
         }
 
-        if (discountPercent) {
-            const discountPercentOrError = DiscountPercent.create(discountPercent);
-            validationCombine.push(discountPercentOrError);
-        }
-
-        const validateRuleResult = Result.combine(validationCombine);
-        if (validateRuleResult.isFailure) {
-            return new ApiError.BadRequestError(validateRuleResult.error);
-        }
-
-        return Result.ok({
+        const props: ProductProps = {
             name: nameOrError.getValue(),
             price: priceOrError.getValue(),
             quantity: quantityOrError.getValue(),
             description: descriptionOrError.getValue(),
             image,
-            categoryId
-        });
+            categoryId,
+        }
+
+        if (skus) {
+            const productSkusOrError = skus.map(s => this.addSku(s));
+            const combineResults = Result.combine(productSkusOrError);
+            if (combineResults.isFailure) {
+                return Result.fail(combineResults.error);
+            }
+            props.skus = ProductSkus.create(productSkusOrError.map(r => r.getValue())).getValue();
+        }
+
+        if (discountPercent) {
+            const discountPercentOrError = DiscountPercent.create(discountPercent);
+            if (discountPercentOrError.isFailure) {
+                return Result.fail(discountPercentOrError.error);
+            }
+            props.discountPercent = discountPercentOrError.getValue();
+        }
+        return Product.create(props);
     }
 
     private addSku(sku: SkuDto): Result<ProductSku> {
