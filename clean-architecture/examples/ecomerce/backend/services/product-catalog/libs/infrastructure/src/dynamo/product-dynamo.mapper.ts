@@ -1,13 +1,13 @@
 import { DiscountPercent, Product, ProductDescription, ProductName, ProductPrice, ProductProps, ProductQuantity, ProductSku, ProductStatus } from "@lib/core/domains";
 import { ProductSkus } from "@lib/core/domains/product-skus";
-import { Injectable } from "@nestjs/common";
 import { Mapper } from "company-core";
-import { ProductMongoDocumentProps } from "./product-mongo.schema";
+import { ProductDynamoTable } from "./product-dynamo.schema";
 
-@Injectable()
-export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProps> {
 
-    toDomain(persistenceModel: ProductMongoDocumentProps): Product {
+export class ProductDynamoMapper extends Mapper<Product, ProductDynamoTable> {
+
+
+    toDomain(persistenceModel: ProductDynamoTable): Product {
         try {
             const props: ProductProps = {
                 name: ProductName.create(persistenceModel.name).getValue(),
@@ -21,7 +21,7 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                     const sku = ProductSku.create({
                         image: s.image,
                         description: ProductDescription.create(s.description).getValue()
-                    }, s._id).getValue();
+                    }, s.PK).getValue();
                     sku.createdAt = s.createdAt;
                     sku.updatedAt = s.updatedAt;
                     return sku;
@@ -30,7 +30,7 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                 discountPercent: DiscountPercent.create(persistenceModel.discountPercent).getValue()
             }
 
-            const product = Product.create(props, persistenceModel._id).getValue();
+            const product = Product.create(props, persistenceModel.PK).getValue();
             product.createdAt = persistenceModel.createdAt;
             product.updatedAt = persistenceModel.updatedAt;
 
@@ -39,7 +39,8 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
             throw error;
         }
     }
-    fromDomain(domainModel: Product): ProductMongoDocumentProps {
+    
+    fromDomain(domainModel: Product): ProductDynamoTable {
         try {
             const {
                 name,
@@ -55,7 +56,7 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
             } = domainModel.props;
 
             return {
-                _id: domainModel.id,
+                PK: domainModel.id,
                 name: name.value,
                 image: image,
                 price: price.value,
@@ -64,7 +65,7 @@ export class ProductMongoMapper extends Mapper<Product, ProductMongoDocumentProp
                 description: description.value,
                 views: views,
                 skus: skus.value.map(sku => ({
-                    _id: sku.id,
+                    PK: sku.id,
                     image: sku.props.image,
                     description: sku.props.description.value,
                     createdAt: sku.createdAt,

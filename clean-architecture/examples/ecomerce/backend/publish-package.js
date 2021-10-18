@@ -7,18 +7,18 @@ import {
     writeFileSync
 } from 'fs';
 
-const app = {
-    name: 'core',
-    packageName: 'company-core',
-    version: '0.0.1',
-    directory: './libs/core',
-    rootDirectory: '.',
-    destinationApps: [
-    ],
-    exclusionApps: [
-    ],
-    isLocal: true,
-}
+// const app = {
+//     name: 'core',
+//     packageName: 'company-core',
+//     version: '0.0.1',
+//     directory: './libs/core',
+//     rootDirectory: '.',
+//     destinationApps: [
+//     ],
+//     exclusionApps: [
+//     ],
+//     isLocal: true,
+// }
 
 // const app = {
 //     name: 'plugin-mongo',
@@ -49,6 +49,23 @@ const app = {
 //     ],
 //     isLocal: true,
 // }
+
+const app = {
+    name: 'plugin-dynamo',
+    packageName: 'plugin-dynamo',
+    version: '0.0.1',
+    directory: './libs/plugin-dynamo',
+    rootDirectory: '.',
+    destinationApps: [
+        // 'plugin-mongo',
+    ],
+    exclusionApps: [
+        'core', 'plugin-mongo', 'plugin-mysql'
+    ],
+    isLocal: true,
+}
+
+
 
 const buildPackage = async (directory, version) => {
     const commandLine = `cd ${directory}; npm run build ; npm pack`;

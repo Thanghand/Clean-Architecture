@@ -1,0 +1,43 @@
+{
+  "name": "plugin-dynamo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "thangcao",
+  "license": "ISC",
+  "dependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "@aws/dynamodb-data-marshaller": "^0.7.3",
+    "@aws/dynamodb-expressions": "^0.7.3",
+    "@nestjs/common": "^7.6.17",
+    "aws-sdk": "2.917.0",
+    "is-class": "^0.0.9",
+    "reflect-metadata": "^0.1.13",
+    "company-core": "file:./__npm-registry__/company-core-0.0.1.tgz"
+  },
+  "peerDependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "@aws/dynamodb-data-marshaller": "^0.7.3",
+    "@nestjs/common": "^7.6.13",
+    "company-core": "file:./__npm-registry__/company-core-0.0.1.tgz"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-rokket-labs": "^0.1.4",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-prettier": "^3.1.2"
+  }
+}

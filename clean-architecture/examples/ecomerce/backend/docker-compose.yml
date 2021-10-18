@@ -3,7 +3,7 @@ version: '3.0'
 services:
   mongodb:
     image: mongo:4.4.1
-    container_name: local-mongodb
+    container_name: mongodb
     restart: always
     networks:
       - app-network
@@ -29,6 +29,15 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - app-network
+
+  dynamodb:
+    container_name: dynamodb
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
   
   api-product-catalog:
     image: api-product-catalog
@@ -41,6 +50,7 @@ services:
     depends_on:
       - mongodb
       - mysql
+      - dynamodb
     ports:
       - 3000:3000
       - 6000:9000

@@ -29,6 +29,7 @@
     "company-core": "file:./__npm-registry__/company-core-0.0.1.tgz",
     "plugin-mongo": "file:./__npm-registry__/plugin-mongo-0.0.1.tgz",
     "plugin-mysql": "file:./__npm-registry__/plugin-mysql-0.0.1.tgz",
+    "plugin-dynamo": "file:./__npm-registry__/plugin-dynamo-0.0.1.tgz",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "^7.4.0",
