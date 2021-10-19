@@ -1,6 +1,18 @@
 
 # E-commerce application
 
+## How to run application
+
+```
+# docker-compose up
+```
+
+- If you change the code, you have to rebuild the image for example:
+
+```
+# docker-compose build
+# docker-compose up
+```
 ## Requirements
 
 <p align="center">

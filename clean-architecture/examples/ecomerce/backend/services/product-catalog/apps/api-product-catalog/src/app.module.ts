@@ -7,9 +7,9 @@ import { ProductController } from './controllers';
 
 @Module({
   imports: [
-    // ProductMongoModule,
+    ProductMongoModule,
     // ProductMysqlModule,
-    ProductDynamoModule
+    // ProductDynamoModule
   ],
   controllers: [ProductController],
   providers: [

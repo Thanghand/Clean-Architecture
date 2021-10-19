@@ -400,18 +400,16 @@ const doSomething = (price, response) => {
 -   Functional **strong support** about Immutable.
 
 ```typescript
-
-const handsomeMaleStudents = user.filter(s => isMale(s))
+const handsomeMaleStudents = users.filter(s => isMale(s))
                                  .filter(s => isTeenagers(s))
                                  .filter(s => isHandsome(s))
                                  .map(s => toStudent(s));
 
 student.name('David')
-       .age('29)
+       .age('29')
        .gender('Male')
        .email('david@gmail.com')
        .phone('1312321');
-
 ```
 
 
