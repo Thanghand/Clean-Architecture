@@ -34,7 +34,7 @@
 
 -   Those components should be split up so that the users don’t have to depend on classes that they don’t use.
 
--   This is basically the same thing as Interface Segregation Principle.
+-   This is basically the same thing as "ISP" (Interface Segregation Principle).
 
 **Note**:
 
@@ -57,6 +57,10 @@ Having cycles in the source code component dependency graph brings the following
 -   You need to have version agreements between multiple components to be able to release. You lose independence of release-ability and the entangled components now need to be released together.
 
 **Example**:
+
+<p align="center">
+  <img src="images/ADP.png" />
+</p>
 
 **_Role Service Module_**
 
@@ -154,6 +158,10 @@ class AuthorizeService {
 ### **Solution**:
 
 Add **Permission Module** to cut the cycle
+
+<p align="center">
+  <img src="images/ADP-solutions.png" />
+</p>
 
 **_Permission Module_**
 

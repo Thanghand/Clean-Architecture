@@ -59,6 +59,8 @@ function calculation() {
 }
 ```
 
+=> Cannot adapt to complicated projects
+
 # **Object Oriented Programming**:
 
 > The second paradigm to be adopted was actually discovered two years earlier, in 1966, by Ole Johan Dahl and Kristen Nygaard.
@@ -67,7 +69,18 @@ function calculation() {
 
 The main idea behind Object Oriented Programming is to make our code more simplicity, reusability, extendibility, and security.
 
+There are 4 principles:
+
+- Encapsulation
+- Inheritance
+- Polymorphism
+- Abstraction
+
 ## **Encapsulation**:
+
+<p align="center">
+  <img src="images/enscapsulation.png" />
+</p>
 
 -   Encapsulation is a mechanism of wrapping up the data under a single unit, making the fields in a class private to hiddden and prevent access directly, keep safe from from outside interference and misuse.
 
@@ -224,21 +237,15 @@ const redisProductRepository: BaseProductRepository = new RedisProductRepository
 const productService = new ProductService(redisProductRepository);
 ```
 
-# **Functional Programming**:
+### What is the problems of OOP ?
 
-## **Immutable and Architecture**:
-
-All race conditions, deadlocks and concurrent update problems are caused due to mutable variables. As an architect, understanding how and when immutability is practicable is a powerful tool to build programs that are robust under concurrency.
-
-The core idea of functional programming is to rely less on polymorphism and loops but instead uses higher-order function for abstraction such as map, filter and reduce functions for iteration.
-
-## **Different between Mutable and Immutable**?
+=> Mutable
 
 **What is Mutable?**
 
 -   **Mutable** mean that the object that **can be change** after they have been created.
 
-**The painful of OOP?**
+**The painful of OOP**
 
 > Everything in OOP is mutable. Because in OOP, methods can change attributes of that object/class directly and always return the mutable object, so the biggest disadvantage of OOP is side-effect. Side-effect will be a nightmare if we don't control it well.
 
@@ -278,8 +285,8 @@ const doSomething = (price, response) => {
 
 const getProductHandler = async (event): MutableResponse => {
     ...
-    const response = new MutableResponse();
 
+    const response = new MutableResponse();
 
     const isProductExisted = false;
     if(!isProductExisted) {
@@ -288,7 +295,8 @@ const getProductHandler = async (event): MutableResponse => {
         return;
     }
 
-    doSomething(price, response);        // Imagine your co-worker is working on this function
+    // Imagine your co-worker is working on this function
+    doSomething(price, response); 
 
     const products = await productRepository.getProduct();
 
@@ -325,9 +333,18 @@ const doSomething = (price, response) => {
 };
 ```
 
+# **Functional Programming**:
+
+## **Immutable and Architecture**:
+
+The core idea of functional programming is to rely less on polymorphism and loops but instead uses higher-order function for abstraction such as map, filter and reduce functions for iteration.
+
+## **Different between Mutable and Immutable**?
+
+
 **What is Immutable?**
 
--   **Immutables** are the objects whose state **cannot be changed** once the object is created.
+-   **Immutable** are the objects whose state **cannot be changed** once the object is created.
 
 -   **Immutable** just simply that the object can't be modify, if you wanna change, create a new one.
 
@@ -381,6 +398,22 @@ const doSomething = (price, response) => {
 -   Return new object whenever implement function, keep the original object not modify, prevent the side-effect that OOP does
 
 -   Functional **strong support** about Immutable.
+
+```typescript
+
+const handsomeMaleStudents = user.filter(s => isMale(s))
+                                 .filter(s => isTeenagers(s))
+                                 .filter(s => isHandsome(s))
+                                 .map(s => toStudent(s));
+
+student.name('David')
+       .age('29)
+       .gender('Male')
+       .email('david@gmail.com')
+       .phone('1312321');
+
+```
+
 
 We can re-write the above Example to Function Immutable like this:
 
