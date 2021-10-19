@@ -277,6 +277,10 @@ class AuthorizeService {
 
 # **Stable Dependency Principle (SDP)**
 
+<p align="center">
+  <img src="images/SDP.png" />
+</p>
+
 -   This principle says that dependencies should be in the direction of stability. That is, less stable components should depend on more stable components. This minimizes the effect of change.
 
 -   In an application there must be components that are designed to be volatile because we expect them to change. This components should therefore be easy to change and should not be depended on by something that is difficult to change.
@@ -284,6 +288,10 @@ class AuthorizeService {
 -   We should depend in the direction of stability. Again employing the DIP can help us to apply this principle breaking dependency on a stable component.
 
 # **Stable Abstraction Principle (SAP)**
+
+<p align="center">
+  <img src="images/SAP.png" />
+</p>
 
 > High-level logic and policies should be placed into stable components and they should be depended on by other classes.
 

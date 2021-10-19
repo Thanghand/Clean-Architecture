@@ -13,13 +13,15 @@
   <img src="images/clean-architecture.png" />
 </p>
 
+Clean Architecture is using "DIP" (Dependency Inversion Principle) for every layer
+
 ## **Entity (Domain Centric)**
 
--   **Entity** is a normal model/domain class.
+-   **Entity** is a normal model class.
 
--   Normally, we think model/domain class actually only have data attributes and some get set functions.
+-   Normally, we think model class actually only have data attributes and some get set functions.
 
--   Uncle Bob does not want entity to be a simple model class. He want entity should be a model/domain centric.
+-   Uncle Bob does not want entity to be a simple model class. He want entity should be a model centric.
 
 -   **Domain Centric** is not only a class which contain the data attributes, but it also take care the behaviors logic of the business. It manages state data of the model.
 
@@ -106,7 +108,7 @@ export class Product extend Entity {
 ### **Conclusion**
 
     - Every public functions are represent for every behavior logic of the business
-    - Easy to write unit test without mocking
+    - Easy to write unit test without mocking (TDD)
     - Easy to understand overview of the business
 
 ## **Use Case**
@@ -139,34 +141,17 @@ export class ProductService implements IProductService {
         }
     }
 
-    updatePrice() {
-        // Implement logic
+    update(id, request){
+
     }
 
-    createDiscountPrice() {
-        // Implement logic
+    findById(id) {
+
     }
 
-    updateName() {
-        // Implement logic
-    }
+    find(query) {
 
-    updateStatus() {
-        // Implement logic
     }
-
-    increaseView() {
-        // Implement logic
-    }
-
-    addNewSku() {
-        // Implement logic
-    }
-
-    removeSku() {
-        // Implement logic
-    }
-
     ...
     // More functions
 }
@@ -214,7 +199,25 @@ export class CreateProductUseCase extends UseCase<CreateProductInput, string> im
 -   Following the example, you probably understand the meaning of **Use Case**
 -   Every **Use Case** have their own boundary.
 
+
+### **_Concerns_**
+
+- I split to multiple use cases, so I just handle business logic in UseCase instead of entity
+
+<p align="center">
+  <img src="images/usecase-different-logic.png" />
+</p>
+
+### Solution
+
+<p align="center">
+  <img src="images/usecase-same-logic.png" />
+</p>
 ## **Adapter**
+
+<p align="center">
+  <img src="images/adapter.jpeg" />
+</p>
 
 To understand **Adapter** layer, you have to understand **Adapter Pattern.**
 
@@ -271,7 +274,6 @@ This layer is where all the I/O components go: the UI, database, frameworks, dev
 "Abstractions should not depend upon details. Details should depend on abstractions" - Entity layer doesn't depend on UseCase layer, but UseCase depend on Entity - UseCase layer doesn't depend on Adapter layer, but Adapter depend on UseCase - Adapter layer doesn't depend on Infrastructure, but Infrastructure depend on Adapter
 
 => Decoupling for every layers
-
 # **Another Architectures**
 
 -   Hexagonal Architecture (a.k.a. Ports and Adapters) by Alistair Cockburn and adopted by Steve Freeman, and Nat Pryce in their wonderful book Growing Object Oriented Software

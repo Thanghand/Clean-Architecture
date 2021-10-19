@@ -7,5 +7,5 @@
 - Depending on the time, we should consider to encapsulating the package of the project
 
 ## Following On **Domain Centric**, I would like introduce two concepts
-- CQRS (Command Query Responsibility Segregation)
-- DDD (Domain Driven Design)
+- [CQRS (Command Query Responsibility Segregation)](../cqrs/README.md)
+- [DDD (Domain Driven Design)](../ddd/README.md)

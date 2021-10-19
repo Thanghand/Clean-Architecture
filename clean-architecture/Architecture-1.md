@@ -28,18 +28,6 @@
     -   [Use Cases (Application-Specific Business Rules)](#use-cases-application-specific-business-rules)
     -   [Requests and Response Models](#requests-and-response-models)
 
-# **What is the `Design` and `Architecture`** ?
-
-## **Difference between `Design` and `Architecture`?**
-
-**Answer**: There is **no difference between them.**
-
--   **Architecture** is often referred to as the high-level structure, whereas **design** as the low-level details. However, they both form a continuum. You cannot have one without the other.
-
-## **What is the Goal of architecture?**
-
-> To minimize the human resources required to build and maintain the required system.
-
 # **So what is Architecture**?
 
 The architecture of a software is the composition, shape, communication mechanisms between the components that make the software. The purpose is to facilitate development, deployment, operation and maintenance, optimising to minimize lifetime maintenance cost and maximize programmer productivity.
@@ -93,7 +81,7 @@ Cognitive easiness of what the software does is the critical bit from the operat
 
 -   A carefully though-through architecture vastly mitigates this costs and illuminates the pathway for future features.
 
-## **Good Architecture: Keeping Options Open**:
+## **Good Architecture: Keeping Options Open** (Important):
 
 > **Reminder**: Software has two types of value: the value of its **behavior** and the value of its **structure**. The second of these is the greater of the two because it is this value that makes software soft.
 
@@ -147,7 +135,7 @@ Architectures get damaged when developers unify pieces of accidental duplication
 -   **Deployment Level**
 -   **Service Level**
 
-# **Boundaries: Drawing Lines**
+# **Boundaries: Drawing Lines** (Important)
 
 > Some of those lines are drawn very early in a project’s life—even before any code is written. Others are drawn much later. Those that are drawn early are drawn for the purposes of deferring decisions for as long as possible, and of keeping those decisions from polluting the core business logic.
 
@@ -213,7 +201,7 @@ Yes, a software that runs different parts in different local processes has a str
 
 -   The general idea of plugin architecture also holds: low-level services should act as a plugin to higher level ones.
 
-# **Policy and Level**
+# **Policy and Level** (Important)
 
 Clean architecture fundamental idea of higher-level policies should not depend on low-level details is supported on a notion of component level that we have not explored formally yet.
 
@@ -222,46 +210,3 @@ A possible definition of a component level is the minimum number of steps needed
 **Why is this notion of level important?**
 
 > Higher-level policies—those that are farthest from the inputs and outputs—tend to change less frequently, and for more important reasons, than lower-level policies. Lower-level policies—those that are closest to the inputs and outputs—tend to change frequently, and with more urgency, but for less important reasons.
-
-# **Business Rules**
-
-The simple definition of **business rules** is a procedure that helps the business make or save money.
-
-To divide our app into **business rules** (policies) and plugins, we better know what **business rules** are.
-
-## **Entities (Application-Independent Business Rules)**
-
-There are procedures that would exist in the business even if they were not automated and had to be executed manually. We call these procedures Critical Business Rules.
-
-An **Entity** is an object within our software that represents the union of critical business rules operating on critical business data.
-
--   The entity should either hold the critical business data OR have very easy access to it.
--   The entity does not know anything about databases, user interfaces or third-party frameworks.
--   In an object-oriented language the entity may be a class, but in other paradigms it can be whatever construct allows to bind data and behaviour together (all programing paradigms have this concept).
-
-## **Use Cases (Application-specific Business Rules)**
-
-They are **business rules** that make or save money by defining the way the automated system operates. They wouldn't exist if the business operated in a manual environment.
-
-**Important points about use cases:**
-
--   Each use case is a description of the way the system is used.
--   They specify the input provided by the user, the processing steps and the output returned.
--   It uses other data elements to represent input data and output data.
-    They specify how and when the Entities' Critical Business Rules are invoked.
--   Entities have no knowledge of the use cases that control them. Entities are at a higher-level than use cases and therefore do not depend on them.
-    It does NOT describe the user interface. It only specifies the data to be passed in. Use cases don't know if they are part of a web-system, a desktop client, etc.
--   A use case is an object that has one or more functions that implement the application-specific business rules.
-
-## **Requests and Response Models**
-
-Since we want the use case to get input data and return output without coupling them to any particular type of I/O device (like the web or the DB), we need to introduce simple (non-web related) **Request** and **Response** models
-
-**Request and Response have some rules**:
-
--   They should not know about the web or the DB.
--   They should not know about the framework.
--   They should not contain references to Entity objects.
-    Despite probably sharing data with Entity objects, the purpose of these two objects is very different and they will change for very different reasons. Therefore this is accidental duplication and it is better to keep them separate.
-
-**`Important`**: Not complying with the above will result in your use cases indirectly depending on things like the web or the framework.
