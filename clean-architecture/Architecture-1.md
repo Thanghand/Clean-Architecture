@@ -28,18 +28,6 @@
     -   [Use Cases (Application-Specific Business Rules)](#use-cases-application-specific-business-rules)
     -   [Requests and Response Models](#requests-and-response-models)
 
-# **What is the `Design` and `Architecture`** ?
-
-## **Difference between `Design` and `Architecture`?**
-
-**Answer**: There is **no difference between them.**
-
--   **Architecture** is often referred to as the high-level structure, whereas **design** as the low-level details. However, they both form a continuum. You cannot have one without the other.
-
-## **What is the Goal of architecture?**
-
-> To minimize the human resources required to build and maintain the required system.
-
 # **So what is Architecture**?
 
 The architecture of a software is the composition, shape, communication mechanisms between the components that make the software. The purpose is to facilitate development, deployment, operation and maintenance, optimising to minimize lifetime maintenance cost and maximize programmer productivity.
@@ -155,7 +143,7 @@ Architectures get damaged when developers unify pieces of accidental duplication
 
 **Coupling**, especially coupling to premature decisions.
 
-**`Important`**: Premature decisions are decisions that hove nothing to do with the business logic / use cases. E.g. frameworks, data-bases, web servers, libraries , etc.
+**`Important`**: Premature decisions are decisions that hove nothing to do with the business logic / use cases. E.g. frameworks, data-bases, web servers, libraries, etc.
 
 ### **The relationship between the database and the business rules**:
 
