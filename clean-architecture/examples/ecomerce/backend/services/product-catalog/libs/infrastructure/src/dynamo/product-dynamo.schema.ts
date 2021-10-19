@@ -15,7 +15,7 @@ export class ProductDynamoTable {
     @hashKey()
     PK: string;
 
-    @attribute()
+    @rangeKey()
     categoryId: string;
 
     @attribute()
