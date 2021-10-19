@@ -143,7 +143,7 @@ Architectures get damaged when developers unify pieces of accidental duplication
 
 **Coupling**, especially coupling to premature decisions.
 
-**`Important`**: Premature decisions are decisions that hove nothing to do with the business logic / use cases. E.g. frameworks, data-bases, web servers, libraries , etc.
+**`Important`**: Premature decisions are decisions that hove nothing to do with the business logic / use cases. E.g. frameworks, data-bases, web servers, libraries, etc.
 
 ### **The relationship between the database and the business rules**:
 
