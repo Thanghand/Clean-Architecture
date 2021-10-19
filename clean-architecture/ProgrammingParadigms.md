@@ -6,7 +6,7 @@
     -   [Encapsulation](#encapsulation)
     -   [Inheritance](#inheritance)
     -   [Polymorphism](#polymorphism)
-    -   [Encapsulation](#encapsulation)
+    -   [Abstraction](#abstraction)
 -   [Functional Programming](#functional-programming)
     -   [Immutable and Architecture](#immutable-and-architecture)
     -   [Different between Mutable and Immutable](#different-between-mutable-and-immutable)

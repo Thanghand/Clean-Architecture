@@ -1,33 +1,70 @@
-# Summary
+# **Summary**
 
-1. Introduction
-2. Naming rule
-3. Function
-4. Comments
-5. Error Handling
-6. Testing
-7. Class
-8. SOLID
+-   [Introduction](#introduction)
+-   [Naming Rules](#naming-rules)
+    -   [Meaningful name](#meaningful-name)
+    -   [Use Intention-Revealing Names (Telling directly the context)](#use-intention-revealing-names-telling-directly-the-context)
+    -   [Avoid Disinformation](#avoid-disinformation)
+    -   [Make Meaningful Distinctions](#make-meaningful-distinctions)
+    -   [Use Pronounceable Names](#use-pronounceable-names)
+    -   [Use Searchable Names](#use-searchable-names)
+    -   [Class Names](#class-name)
+    -   [Method Names](#method-names)
+    -   [Don't Be Cute](#dont-be-cute)
+    -   [Pick One Word Per Concept](#pick-one-word-per-concept)
+-   [Functions](#functions)
+    -   [Small!](#small)
+    -   [Do One Thing](#do-one-thing)
+    -   [One level of abstraction per function](#one-level-of-abstraction-per-function)
+    -   [Switch Statements](#switch-statements)
+    -   [Use Descriptive Names](#use-descriptive-names)
+    -   [Function arguments](#function-arguments)
+    -   [Don't use flags as function parameters](#dont-use-flags-as-function-parameters)
+    -   [Side Effects](#side-effects)
+    -   [Don't Repeat Yourself](#dont-repeat-yourself)
+-   [Comments](#comments)
+    -   [Comments Do Not Make Up for Bad Code](#comments-do-not-make-up-for-bad-code)
+    -   [Explain Yourself in Code](#explain-yourself-in-code)
+        -   [TODO Comments](#todo-comments)
+        -   [Bad Comments](#bad-comments)
+        -   [Redundant Comments](#redundant-comments)
+        -   [Noise Comments](#noise-comments)
+        -   [Too Much Information](#too-much-information)
+        -   [Don't leave commented out code in your codebase](#dont-leave-commented-out-code-in-your-codebase)
+-   [Error Handling](#error-handling)
+    -   [Don't Ignore Caught Errors](#dont-ignore-caught-erros)
+    -   [Don't Return Null](#dont-return-null)
+    -   [Don't Pass Null](#dont-pass-null)
+-   [Testing](#testing)
+    -   [The Three Laws of TDD](#the-three-laws-of-tdd)
+    -   [Single Concept per Test](#single-concept-per-test)
+    -   [FIRST principle](#first-principle)
+-   [Class](#class)
+    -   [Class Organization](#class-organization)
+        -   [Encapsulation](#encapsulation)
+        -   [Classes Should be Small](#classes-should-be-small)
 
-# Introduction
+# **Introduction**
 
 Problems:
-- How much time can you understand your code or your colleagues after a few months?
-- How many times do you say "Can we do again ?"
-- How many times do you say "Where is the code document or Where is the comment" ?
-- How many times do you confuse between the code and the current document/comment ? 
-- How many times do you say to your manager that I don't know how it's running. It's so weird ?
-- Fix or change something and creating many bugs
-- ...
 
-Why write bad code ? 
-- Are you in a rush?
-- Do you try to go "fast"?
-- Do not you have time to do a good job?
-- Are you tired of work in the same program/module?
-- Does your Boss push you to finish soon ?
+-   How much time can you understand your code or your colleagues after a few months?
+-   How many times do you say "Can we do again ?"
+-   How many times do you say "Where is the code document or Where is the comment" ?
+-   How many times do you confuse between the code and the current document/comment ?
+-   How many times do you say to your manager that I don't know how it's running. It's so weird ?
+-   Fix or change something and creating many bugs
+-   ...
 
-If you say "I will back to fix it later" you could fall in the LeBlanc's law "Later equals never"
+Why write bad code ?
+
+-   Are you in a rush?
+-   Do you try to go "fast"?
+-   Do not you have time to do a good job?
+-   Are you tired of work in the same program/module?
+-   Does your Boss push you to finish soon ?
+
+If you say "I will back to fix it later" you could fall in the LeBlanc's law **`Later equals never`**
 
 It is unprofessional for programmers to bend to the will of managers who don’t understand the risks of making messes.
 
@@ -37,19 +74,19 @@ How can we make the code clean ?
 
 Clean Code is written by Uncle Bob
 
-## Naming rule
+# **Naming rules**
 
-### Meaningful names
+## **Meaningful names**
 
 Names are everywhere in software. Files, directories, variables functions, etc. Because we do so much of it. We have better do it well.
 
-### Use Intention-Revealing Names (Telling directly the context)
+## **Use Intention-Revealing Names (Telling directly the context)**
 
-Choosing good names takes time, but saves more than it takes. So take care with your names and change them when you find better ones.
+-   Choosing good names takes time, but saves more than it takes. So take care with your names and change them when you find better ones.
 
-The name of a variable, function or class, should answer all the big questions.
-It should tell you why it exists, what it does, and how is used.
-If a name requires a comment, then the name does not reveals its intent.
+-   The name of a variable, function or class, should answer all the big questions.
+    It should tell you why it exists, what it does, and how is used.
+    If a name requires a comment, then the name does not reveals its intent.
 
 | Does not reveals intention       | Reveals intention       |
 | -------------------------------- | ----------------------- |
@@ -57,9 +94,22 @@ If a name requires a comment, then the name does not reveals its intent.
 
 **Bad:**
 
-```
+```javascript
 // Get male teenagers
-const filterUsers = users.filter(u => (u.age >= AGE.9 && u.age <= AGE.18) && u.gender === GENDER.MALE);
+const users = [
+    {
+        name: 'Thang',
+        age: 28,
+        gender: 'male'
+    },
+    {
+        name: 'Van',
+        age: 17,
+        gender: 'female'
+    },
+];
+
+const filterUsers = users.filter(u => (u.age >= 9 && u.age <= 18) && u.gender === 'male');
 
 ...
 
@@ -70,9 +120,9 @@ vaccinated(filterUsers);
 
 **Good:**
 
-```
-const isMaleTeenagers = (user) => (user.age >= AGE.9 && user.age <= AGE.18)
-                                        && user.gender === GENDER.MALE;
+```javascript
+const isMaleTeenagers = (user) => (user.age >= 9 && user.age <= 18)
+                                        && user.gender === 'male');
 ...
 
 const maleTeenagers = users.filter(u => isTeenagers(age));
@@ -83,11 +133,11 @@ vaccinated(maleTeenagers);
 
 ```
 
-### Avoid Disinformation
+## **Avoid Disinformation**
 
-- Programmers must avoid leaving false clues that obscure the meaning of code. We should avoid words whose entrenched meaning vary from our intended meaning.
+Programmers must avoid leaving false clues that obscure the meaning of code. We should avoid words whose entrenched meaning vary from our intended meaning.
 
-```
+```javascript
 const listProduct = await getProducts(); // OK we think it will return the list
 
 ...
@@ -95,28 +145,27 @@ const listProduct = await getProducts(); // OK we think it will return the list
 const listProduct = await getProducts();  // return [ {categoryName: "Fish", products: [... ] }];
 ```
 
-should be
+**should be**
 
-```
+```javascript
 const groupOfCategoryProducts = await getProducts();
 ```
 
-- Beware of using names which vary in small ways
+**Beware of using names which vary in small ways**
 
-```
+```javascript
 class ShoppingCartServiceForCaching {}
 
-class ShoppingCartServiceForUserDefault{}
+class ShoppingCartServiceForUserDefault {}
 
 class ShoppingCartServiceForNetWorkCalls {}
-
 ```
 
-You maybe select wrong name when the ide suggest you the list class "ShoppingCartService".
+You maybe select wrong name when the ide suggest you the list class **_ShoppingCartService_**.
 
-should be
+**should be**
 
-```
+```javascript
 class CacheService {}
 
 class UserDefaultService {}
@@ -124,14 +173,15 @@ class UserDefaultService {}
 class NetworkClient {}
 ```
 
-No need to scan all the name when typing
+**`Note`**: No need to scan all the name when typing
 
-### Make Meaningful Distinctions
+## **Make Meaningful Distinctions**
 
-Programmers create problems for themselves when they write code solely to satisfy a compiler or interpreter.
-For example because you can't use the same name to refer two different things in the same scope, you might be tempted to change one name in an arbitrary way.
+> Programmers create problems for themselves when they **write code solely to satisfy a compiler or interpreter.**
 
-```
+**For example**: Because you can't use the same name to refer two different things in the same scope, you might be tempted to change one name in an arbitrary way.
+
+```javascript
 function copyItems(a1, a2) {
     for (let i = 0; i < a1.length; i++) {
         a2[i] = a1[i];
@@ -139,9 +189,9 @@ function copyItems(a1, a2) {
 }
 ```
 
-should be
+**should be**
 
-```
+```javascript
 function copyItems(source, destination) {
     for (let i = 0; i < source.length; i++) {
         destination[i] = source[i];
@@ -149,49 +199,46 @@ function copyItems(source, destination) {
 }
 ```
 
-Noise words are another meaningless distinction.
+**Noise words are another meaningless distinction.**
 
-```
+```javascript
 const userInfo = getUserInfo();
 const userData = getUserData();
-
 ```
 
-Noise words are redundant
+**Noise words are redundant**
 
-```
+```javascript
 const nameString = '';
 const streetString = '';
 const currentIdNumber = '1';
 ```
 
-### Use Pronounceable Names
+## **Use Pronounceable Names**
 
-```
-class DtaRcrd102 {
-}
-```
-
-should be
-
-```
-class Customer {
-}
+```javascript
+class DtaRcrd102 {}
 ```
 
-### Use Searchable Names
+**should be**
+
+```javascript
+class Customer {}
+```
+
+## **Use Searchable Names**
 
 Single-letter names and numeric constants have a particular problem in that they are not easy to locate across a body of text.
 
-### Class Names
+## **Class Names**
 
-Classes and objects should have 'noun' or 'noun phrase' names like `Customer`, `WikiPage`, `Account`, and `AddressParser`. A class name should not be a verb.
+Classes and objects should have 'noun' or 'noun phrase' names like **`Customer`**, **`WikiPage`**, **`Account`**, and **`AddressParser`**. A class name **should not be a verb.**
 
-### Method Names
+## **Method Names**
 
-Methods should have verb or verb phrase names like `postPayment`, `deletePage` or `save`
+Methods **should have verb or verb phrase names** like **`postPayment`**, **`deletePage`** or **`save`**
 
-### Don't Be Cute
+## **Don't Be Cute**
 
 | Cute name         | Clean name    |
 | ----------------- | ------------- |
@@ -199,24 +246,27 @@ Methods should have verb or verb phrase names like `postPayment`, `deletePage` o
 | `whack`           | `kill`        |
 | `eatMyShorts`     | `abort`       |
 
-### Pick one word per concept
+## **Pick one word per concept**
 
-Pick one word for one abstract concept and stick with it. For instance, it’s confusing to have fetch, retrieve, and get as equivalent methods of different classes.
+> Pick one word for one abstract concept and stick with it.
 
-## Functions
+For instance, it’s confusing to have fetch, retrieve, and get as equivalent methods of different classes.
 
-### Small!
+# **Functions**
 
-The first rule of functions is that they should be small. The second rule of functions is that they should be smaller than that.
+## **Small!**
 
-### Do One Thing
+1. The first rule of functions is that they should be small.
+2. The second rule of functions is that they should be smaller than that.
 
-FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL. THEY SHOULD DO IT ONLY.
+## **Do One Thing**
+
+> FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL. THEY SHOULD DO IT ONLY.
 
 **Bad:**
-```
+
+```javascript
 class LinkedInProfile {
-    
     getProfile() {
         this.view += 1;
         this.updatedAt = Date.now.toString();
@@ -224,10 +274,11 @@ class LinkedInProfile {
     }
 }
 ```
+
 **Good:**
-```
+
+```javascript
 class LinkedInProfile {
-    
     getProfile() {
         return this.information;
     }
@@ -239,7 +290,7 @@ class LinkedInProfile {
 }
 ```
 
-### One level of abstraction per function
+## **One level of abstraction per function**
 
 In order to make sure our functions are doing "one thing", we need to make sure that the statements within our function are all at the same level of abstraction.
 
@@ -247,8 +298,7 @@ In order to make sure our functions are doing "one thing", we need to make sure 
 
 We want the code to read like a top-down narrative. 5 We want every function to be followed by those at the next level of abstraction so that we can read the program, descending one level of abstraction at a time as we read down the list of functions.
 
-To say this differently, we want to be able to read the program as though it were a set
-of TO paragraphs, each of which is describing the current level of abstraction and referencing subsequent TO paragraphs at the next level down.
+To say this differently, we want to be able to read the program as though it were a set of TO paragraphs, each of which is describing the current level of abstraction and referencing subsequent TO paragraphs at the next level down.
 
 ```
 - To include the setups and teardowns, we include setups, then we include the test page content, and then we include the teardowns.
@@ -259,7 +309,7 @@ of TO paragraphs, each of which is describing the current level of abstraction a
 
 It turns out to be very difficult for programmers to learn to follow this rule and write functions that stay at a single level of abstraction. But learning this trick is also very important. It is the key to keeping functions short and making sure they do “one thing.” Making the code read like a top-down set of TO paragraphs is an effective technique for keeping the abstraction level consistent.
 
-```
+```javascript
 async function createOrder(request) {
 
     // Validation
@@ -300,9 +350,9 @@ async function createOrder(request) {
 }
 ```
 
-should be
+**should be**
 
-```
+```javascript
 async function getProducts(products) {
     const productIds = products.map(p => p.id);
     const existedProductsResult = await productRepository.findMany(productIds);
@@ -324,7 +374,7 @@ function isProductsHasCorrectPrice(sourceProducts, destinationProducts) {
         }
     }
     return true;
-} 
+}
 
 async function createOrder(request) {
 
@@ -332,7 +382,7 @@ async function createOrder(request) {
     if (validatorResult.isFailure) {
         throw new BadRequest(validatorResult.message);
     }
-   
+
     const existedProductsResult = await this.getProducts(products);
     if (existedProductResult.isFailure) {
         throw new BadRequestError(existedProductResult.error);
@@ -349,10 +399,14 @@ async function createOrder(request) {
     }
 }
 ```
-### Switch Statements
-It’s hard to make a small switch statement. 6 Even a switch statement with only two cases is larger than I’d like a single block or function to be. It’s also hard to make a switch statement that does one thing. By their nature, switch statements always do N things. Unfortunately we can’t always avoid switch statements, but we can make sure that each switch statement is buried in a low-level class and is never repeated. We do this, of course, with polymorphism.
 
-```
+## **Switch Statements**
+
+-   It’s hard to make a small switch statement. 6 Even a switch statement with only two cases is larger than I’d like a single block or function to be.
+-   It’s also hard to make a switch statement that **does one thing**. By their nature, switch statements always do N things.
+-   Unfortunately we can’t always avoid switch statements, but we can make sure that each switch statement is buried in a low-level class and is never repeated. Can we do this? Of course, with **polymorphism.**
+
+```javascript
 class EventManager {
 
     constructor({
@@ -375,15 +429,14 @@ class EventManager {
 }
 ```
 
-should be
+**should be**
 
-```
+```javascript
 class Message {
-    processMessage(message) {};
+    processMessage(message) {}
 }
 
-class StorableMessage extends Message { 
-
+class StorableMessage extends Message {
     // Override
     processMessage(message) {
         justSave(message);
@@ -391,15 +444,13 @@ class StorableMessage extends Message {
 }
 
 class PublicMessage extends Message {
-
     // Override
     processMessage(message) {
         notifyAll(message);
     }
 }
 
-class PrivateMessage extends Message { 
-
+class PrivateMessage extends Message {
     // Override
     processMessage(message) {
         notify(message);
@@ -407,7 +458,6 @@ class PrivateMessage extends Message {
 }
 
 class MessageHandlerService {
-    
     constructor() {
         this.mapHandler = new Map();
 
@@ -417,7 +467,7 @@ class MessageHandlerService {
     }
 
     async processMessage(message) {
-        if (!this.mapHandler.has(message.type)) 
+        if (!this.mapHandler.has(message.type))
             throw new TypeError('This type is not existed');
         const handler = this.mapHandler.get(message.type);
         await handler.processMessage(message);
@@ -427,16 +477,18 @@ class MessageHandlerService {
 const messageHandlerService = new MessageHandlerService();
 const processEvent = (message) => {
     messageHandlerService.processMessage(message);
-}
+};
 
 // Or using Factory
 class MessageHandlerFactory {
-    
     static getHandler(message) {
-        switch(message.type) {
-            case 1: return new StorableMessage();
-            case 2: return new PublicMessage();
-            case 3: return new PrivateMessage();
+        switch (message.type) {
+            case 1:
+                return new StorableMessage();
+            case 2:
+                return new PublicMessage();
+            case 3:
+                return new PrivateMessage();
         }
     }
 }
@@ -444,81 +496,86 @@ class MessageHandlerFactory {
 const processEvent = (message) => {
     const handler = MessageHandlerFactory.getHandler(message);
     handler.processMessage(message);
-}
+};
 ```
-### Use Descriptive Names
+
+## **Use Descriptive Names**
 
 > You know you are working on clean code when each routine turns out to be pretty much what you expected
 
-Half the battle to achieving that principle is choosing good names for small functions that do one thing. The smaller and more focused a function is, the easier it is to choose a descriptive name.
+-   Half the battle to achieving that principle is choosing good names for small functions that do one thing. The smaller and more focused a function is, the easier it is to choose a descriptive name.
 
-Don’t be afraid to make a name long. A long descriptive name is better than a short enigmatic name. A long descriptive name is better than a long descriptive comment. Use a naming convention that allows multiple words to be easily read in the function names, and then make use of those multiple words to give the function a name that says what it does.
+-   Don’t be afraid to make a name long. A long descriptive name is better than a short enigmatic name. A long descriptive name is better than a long descriptive comment. Use a naming convention that allows multiple words to be easily read in the function names, and then make use of those multiple words to give the function a name that says what it does.
 
-Choosing descriptive names will clarify the design of the module in your mind and help you to improve it. It is not at all uncommon that hunting for a good name results in a favorable restructuring of the code.
+-   Choosing descriptive names will clarify the design of the module in your mind and help you to improve it. It is not at all uncommon that hunting for a good name results in a favorable restructuring of the code.
 
-### Function arguments
+## **Function arguments**
 
-Limiting the amount of function parameters is incredibly important because it makes testing your function easier. Having more than three leads to a combinatorial explosion where you have to test tons of different cases with each separate argument.
+-   Limiting the amount of function parameters is incredibly important because it makes testing your function easier. Having more than three leads to a combinatorial explosion where you have to test tons of different cases with each separate argument.
 
-One or two arguments is the ideal case, and three should be avoided if possible. Anything more than that should be consolidated. Usually, if you have more than two arguments then your function is trying to do too much. In cases where it's not, most of the time a higher-level object will suffice as an argument.
+-   One or two arguments is the ideal case, and three should be avoided if possible. Anything more than that should be consolidated. Usually, if you have more than two arguments then your function is trying to do too much. In cases where it's not, most of the time a higher-level object will suffice as an argument.
 
-Since JavaScript allows you to make objects on the fly, without a lot of class boilerplate, you can use an object if you are finding yourself needing a lot of arguments.
+-   Since JavaScript allows you to make objects on the fly, without a lot of class boilerplate, you can use an object if you are finding yourself needing a lot of arguments.
 
-To make it obvious what properties the function expects, you can use the ES2015/ES6 destructuring syntax. This has a few advantages:
+-   To make it obvious what properties the function expects, you can use the ES2015/ES6 destructuring syntax. This has a few advantages:
 
-When someone looks at the function signature, it's immediately clear what properties are being used.
-It can be used to simulate named parameters.
-Destructuring also clones the specified primitive values of the argument object passed into the function. This can help prevent side effects. Note: objects and arrays that are destructured from the argument object are NOT cloned.
-Linters can warn you about unused properties, which would be impossible without destructuring.
+-   When someone looks at the function signature, it's immediately clear what properties are being used.
+    It can be used to simulate named parameters.
+    Destructuring also clones the specified primitive values of the argument object passed into the function. This can help prevent side effects.
 
+**`Note`**:
 
-```
+> -   Objects and arrays that are destructured from the argument object are **NOT** cloned.
+>
+> -   Linters can warn you about unused properties, which would be impossible without destructuring.
+
+```javascript
 function createMenu(title, body, buttonText, cancellable) {
-  // ...
+    // ...
 }
 
-createMenu("Foo", "Bar", "Baz", true);
+createMenu('Foo', 'Bar', 'Baz', true);
 
 // Other way
 function createMenu(menu) {
-  // ...
+    // ...
 }
 ```
 
-should be 
-```
+**should be**
+
+```javascript
 function createMenu({ title, body, buttonText, cancellable }) {
-  // ...
+    // ...
 }
 
 createMenu({
-  title: "Foo",
-  body: "Bar",
-  buttonText: "Baz",
-  cancellable: true
+    title: 'Foo',
+    body: 'Bar',
+    buttonText: 'Baz',
+    cancellable: true,
 });
-
 ```
 
-### Don't use flags as function parameters
+## **Don't use flags as function parameters**
 
 Flags tell your user that this function does more than one thing. Functions should do one thing. Split out your functions if they are following different code paths based on a boolean.
 
-```
+```javascript
 class Dog {
     run(isRun) {
-        this.isRun = isRun
+        this.isRun = isRun;
     }
 }
 
 const dog = new Dog();
 dog.run(true);
 dog.run(false);
-
 ```
-should be 
 
-```
+**should be**
+
+```javascript
 class Dog {
     run() {
         this.isRun = true;
@@ -531,22 +588,24 @@ class Dog {
     }
 }
 ```
-### Side Effects
-In JavaScript, some values are unchangeable (immutable) and some are changeable (mutable). Objects and arrays are two kinds of mutable values so it's important to handle them carefully when they're passed as parameters to a function. A JavaScript function can change an object's properties or alter the contents of an array which could easily cause bugs elsewhere.
 
-Suppose there's a function that accepts an array parameter representing a shopping cart. If the function makes a change in that shopping cart array - by adding an item to purchase, for example - then any other function that uses that same cart array will be affected by this addition. That may be great, however it could also be bad. Let's imagine a bad situation:
+## **Side Effects**
 
-The user clicks the "Purchase" button which calls a purchase function that spawns a network request and sends the cart array to the server. Because of a bad network connection, the purchase function has to keep retrying the request. Now, what if in the meantime the user accidentally clicks an "Add to Cart" button on an item they don't actually want before the network request begins? If that happens and the network request begins, then that purchase function will send the accidentally added item because the cart array was modified.
+-   In JavaScript, some values are unchangeable (immutable) and some are changeable (mutable). Objects and arrays are two kinds of mutable values so it's important to handle them carefully when they're passed as parameters to a function. A JavaScript function can change an object's properties or alter the contents of an array which could easily cause bugs elsewhere.
 
-A great solution would be for the addItemToCart function to always clone the cart, edit it, and return the clone. This would ensure that functions that are still using the old shopping cart wouldn't be affected by the changes.
+-   Suppose there's a function that accepts an array parameter representing a shopping cart. If the function makes a change in that shopping cart array - by adding an item to purchase, for example - then any other function that uses that same cart array will be affected by this addition. That may be great, however it could also be bad. Let's imagine a bad situation:
+
+-   The user clicks the "Purchase" button which calls a purchase function that spawns a network request and sends the cart array to the server. Because of a bad network connection, the purchase function has to keep retrying the request. Now, what if in the meantime the user accidentally clicks an "Add to Cart" button on an item they don't actually want before the network request begins? If that happens and the network request begins, then that purchase function will send the accidentally added item because the cart array was modified.
+
+-   A great solution would be for the addItemToCart function to always clone the cart, edit it, and return the clone. This would ensure that functions that are still using the old shopping cart wouldn't be affected by the changes.
 
 Two caveats to mention to this approach:
 
-There might be cases where you actually want to modify the input object, but when you adopt this programming practice you will find that those cases are pretty rare. Most things can be refactored to have no side effects!
+-   There might be cases where you actually want to modify the input object, but when you adopt this programming practice you will find that those cases are pretty rare. Most things can be refactored to have no side effects!
 
-Cloning big objects can be very expensive in terms of performance. Luckily, this isn't a big issue in practice because there are great libraries that allow this kind of programming approach to be fast and not as memory intensive as it would be for you to manually clone objects and arrays.e
+-   Cloning big objects can be very expensive in terms of performance. Luckily, this isn't a big issue in practice because there are great libraries that allow this kind of programming approach to be fast and not as memory intensive as it would be for you to manually clone objects and arrays.e
 
-```
+```javascript
 // Before login
 let tokenPayload = null;
 
@@ -554,11 +613,11 @@ let tokenPayload = null;
 tokenPayload = {
     id: '12321',
     username: 'Thang Cao',
-    role: 'admin'
-}
+    role: 'admin',
+};
 
 // Some process
-function someProcess () {
+function someProcess() {
     const token = tokenPayload;
 
     doSomething1(token);
@@ -577,470 +636,177 @@ someProcess();
 console.log('Token: ', tokenPayload);
 ```
 
-### Don't Repeat Yourself
+## **Don't Repeat Yourself**
 
-Duplication may be the root of all evil in software. Many principles and practices have been created for the purpose of controlling or eliminating it.
+**Duplication** may be the root of all evil in software. Many principles and practices have been created for the purpose of controlling or eliminating it.
 
-## Comments
+# **Comments**
+
 Nothing can be quite so helpful as a well-placed comment. Nothing can clutter up a module more than frivolous dogmatic comments. Nothing can be quite so damaging as an old comment that propagates lies and misinformation.
 
 If our programming languages were expressive enough, or if we had the talent to subtly wield those languages to express our intent, we would not need comments very much—perhaps not at all.
 
-### Comments Do Not Make Up for Bad Code
+## **Comments Do Not Make Up for Bad Code**
 
 Clear and expressive code with few comments is far superior to cluttered and complex code with lots of comments. Rather than spend your time writing the comments that explain the mess you’ve made, spend it cleaning that mess.
 
+## **Explain Yourself in Code**
 
-### Explain Yourself in Code
 **Bad:**
-```
+
+```javascript
 // Check user is male teenager
 if (user.age >= AGE.9 && user.age <= AGE.18) && user.gender === GENDER.MALE)
 ```
 
 **Good:**
-```
+
+```javascript
 if (isMaleTeenager(user))
 ```
 
-### TODO Comments
-It is sometimes reasonable to leave “To do” notes in the form of //TODO comments. In the following case, the TODO comment explains why the function has a degenerate implementation and what that function's future should be.
+### **TODO Comments**
 
-```
+It is sometimes reasonable to leave “To do” notes in the form of **_TODO comments_**. In the following case, the **TODO comment** explains why the function has a degenerate implementation and what that function's future should be.
+
+```javascript
 // TODO: should support paging and add some query params
 function fetchUsers() {}
 ```
+
 TODOs are jobs that the programmer thinks should be done, but for some reason can’t do at the moment. It might be a reminder to delete a deprecated feature or a plea for someone else to look at a problem. It might be a request for someone else to think of a better name or a reminder to make a change that is dependent on a planned event. Whatever else a TODO might be, it is not an excuse to leave bad code in the system.
 
-### Bad Comments
+### **Bad Comments**
 
-#### Redundant Comments
+#### **Redundant Comments**
 
-A comment is redundant if it describes something that adequately describes itself. For example
+A comment is redundant if it describes something that adequately describes itself.
 
-```
+_For example_:
+
+```javascript
 i++; // increment
 
 const apiOptions = {
-    url: '', // Host Url 
-    port: '' // Port number
-}
+    url: '', // Host Url
+    port: '', // Port number
+};
 
 class ShoppingCart {
-
     // This function will return total price of shopping cart
-    getTotalPrice() {
-
-    }
+    getTotalPrice() {}
 }
 ```
 
-### Noise Comments
-```
+### **Noise Comments**
+
+```javascript
 // The day of the month
 const dayOfMonth;
 ```
 
-### Too Much Information
+### **Too Much Information**
+
 Don't put interesting historical discussions or irrelevant descriptions of details into your comments.
 
-### Don't leave commented out code in your codebase
+### **Don't leave commented out code in your codebase**
+
 Version control exists for a reason. Leave old code in your history.
 **Bad:**
-```
+
+```javascript
 doStuff();
 // doOtherStuff();
 // doSomeMoreStuff();
 // doSoMuchStuff();
 ```
+
 **Good:**
-```
-doStuff()
+
+```javascript
+doStuff();
 ```
 
-## Error handling
+# **Error handling**
 
-### Don't ignore caught errors
+## **Don't ignore caught errors**
 
 **Bad:**
-```
+
+```javascript
 try {
-  functionThatMightThrow();
+    functionThatMightThrow();
 } catch (error) {
-  console.log(error);
+    console.log(error);
 }
 ```
+
 **Good:**
 
-```
+```javascript
 try {
-  functionThatMightThrow();
+    functionThatMightThrow();
 } catch (error) {
-  // One option (more noisy than console.log):
-  console.error(error);
-  // Another option:
-  notifyUserOfError(error);
-  // Another option:
-  reportErrorToService(error);
-  // OR do all three!
+    // One option (more noisy than console.log):
+    console.error(error);
+    // Another option:
+    notifyUserOfError(error);
+    // Another option:
+    reportErrorToService(error);
+    // OR do all three!
 
-  throw error;
+    throw error;
 }
 ```
 
-### Don't Return Null
-If you are tempted to return null from a method, consider throwing an exception or returning a SPECIAL CASE object instead. If you are calling a null-returning method from a third-party API, consider wrapping that method with a method that either throws an exception or returns a special case object.
+## **Don't Return Null**
 
-### Don't Pass Null
+-   If you are tempted to return null from a method, consider throwing an exception or returning a **SPECIAL CASE object** instead.
+-   If you are calling a null-returning method from a third-party API, consider wrapping that method with a method that either throws an exception or returns a **SPECIAL CASE object**.
+
+## **Don't Pass Null**
 
 Returning null from methods is bad, but passing null into methods is worse. Unless you are working with an API which expects you to pass null, you should avoid passing null in your code whenever possible.
 
-## Testing
+# **Testing**
 
-### The Three Laws of TDD
+## **The Three Laws of TDD**
 
-- **First Law** You may not write production code until you have written a failing unit test.
-- **Second Law** You may not write more of a unit tests than is sufficient to fail, and not compiling is failing.
-- **Third Law** You may not write more production code than is sufficient to pass the currently failing tests.
+-   **First Law** You may not write production code until you have written a failing unit test.
+-   **Second Law** You may not write more of a unit tests than is sufficient to fail, and not compiling is failing.
+-   **Third Law** You may not write more production code than is sufficient to pass the currently failing tests.
 
-### Single concept per Test
+## **Single concept per Test**
 
 This rule will help you to keep short functions.
 
-- **Write one test per each concept that you need to verify**
+-   **Write one test per each concept that you need to verify**
 
-### F.I.R.S.T
+## **FIRST principle**
 
-- **Fast** Test should be fast.
-- **Independent** Test should not depend on each other.
-- **Repeatable** Test Should be repeatable in any environment.
-- **Self-Validating** Test should have a boolean output. either they pass or fail.
-- **Timely** Unit tests should be written just before the production code that makes them pass. If you write tests after the production code, then you may find the production code to be hard to test.
+Each character of **FIRST** can be analyzed as below
 
+-   **Fast** Test should be fast.
+-   **Independent** Test should not depend on each other.
+-   **Repeatable** Test Should be repeatable in any environment.
+-   **Self-Validating** Test should have a boolean output. either they pass or fail.
+-   **Timely** Unit tests should be written just before the production code that makes them pass. If you write tests after the production code, then you may find the production code to be hard to test.
 
-<a name="chapter10">
-<h1>Chapter 10 -  Classes</h1>
-</a>
+# **Class**
 
-## Class Organization
+## **Class Organization**
 
-### Encapsulation
+### **Encapsulation**
 
-We like to keep our variables and utility functions small, but we're not fanatic about it. Sometimes we need to make a variable or utility function protected so that it can be accessed by a test.
+-   We like to keep our variables and utility functions small, but we're not fanatic about it.
 
-### Classes Should be Small
+-   Sometimes we need to make a variable or utility function protected so that it can be accessed by a test.
 
-- First Rule: Classes should be small
-- Second Rule: **Classes should be smaller than the first rule**
+### **Classes Should be Small**
 
-## SOLID
+1. First Rule: Classes should be small
+2. Second Rule: **Classes should be smaller than the first rule**
 
-### Single Responsibility Principle (SRP)
+## **SOLID**
 
-
-"A class or function should only have one reason to change.". It's tempting to jam-pack a class with a lot of functionality, like when you can only take one suitcase on your flight. The issue with this is that your class won't be conceptually cohesive and it will give it many reasons to change. Minimizing the amount of times you need to change a class is important. It's important because if too much functionality is in one class and you modify a piece of it, it can be difficult to understand how that will affect other dependent modules in your codebase.
-
-**Bad**
-```
-class Employee {
-    constructor(type) {
-        this.type = type;
-    }
-    calculatePay (): number {
-        // implement algorithm for hr, accounting and it
-        switch(this.type) {
-            case 'HR': {
-                // implement logic here
-            }
-            break;
-            case 'Accounting': {
-                // implement logic here
-            }
-        }
-    }
-   reportHours (): number {
-        // implement algorithm for hr, accounting and it
-    }
-
-   save (): Promise<any> {
-        // implement algorithm for hr, accounting and it
-    }
-}
-
-```
-
-**Good**
-```
-class Employee {
-    calculatePay() {}
-
-    reportHours() {}
-    
-    save() {}
-}
-
-class HR extends Employee {
-    calculatePay() {
-        // implement own algorithm
-    }
-
-    reportHours() {
-        // implement own algorithm
-    }
-}
-
-class Accounting extends Employee {
-    calculatePay() {
-        // implement own algorithm
-    }
-
-    reportHours() {
-        // implement own algorithm
-    }
-}
-
-class IT extends Employee {
-
-}
-```
-
-### Open/Closed Principle (OCP)
-
-"A software artifact should be open for extension but closed for modification.”
-What does that mean though? This principle basically states that you should allow users to add new functionalities without changing existing code.
-
-> "Higher level-components are protected from changes to lower level components."
-```
-class MongoProductRepository{
-
-    constructor(mongoose) {
-        this.mongoose = mongoose;
-    }
-
-    getClient() {
-        return this.mongoose;
-    }
-
-    isExisted() {
-        // Query from DB
-    }
-
-    ...
-}
-```
-After 6 months, your boss tell you want to use Dynamodb?
-
-```
-class ProductRepository extends BaseRepository {
-    isExisted() {}
-    ...
-}
-
-class MongoProductRepository extends ProductRepository {
-
-    constructor() {}
-
-    isExisted() {
-        // Query from DB
-    }
-}
-
-class DynamoProductRepository extends ProductRepository {
-
-    constructor() {}
-
-    isExisted() {
-        // Query from DB
-    }
-}
-
-// Define mock implementation or using jest mock
-class MockProductRepositoryImpl extends ProductRepository {
-
-    isExisted() {
-        // mock the result
-    }
-}
-```
-
-### Liskov Substitution Principle (LSP)
-
-**Introduced by Barbara Liskov in the 1980s, she said**
-
- > "Let Φ(x) be a property provable about objects x of type T. Then Φ(y) should be true for objects y of type S where S is a subtype of T."
-
-**In Uncle Bob's "Clean Architecture", he says**
- > "To build software systems from interchangeable parts, those parts must adhere to a contract that allows those parts to be substituted one for another."
-
-```
-class ProductService {
-
-    /**
-     * @param {ProductRepository}
-     */
-    constructor(productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    async updateProduct(product) {
-        // Check existed product
-        const isProductExisted = await this.productRepository.isExisted(product.id);
-        ...
-    }
-}
-
-const productRepository = new MongoProductRepository(); // Before
-const productRepository = new DynamoProductRepository(); // Now
-
-const productService = new ProductService(productRepository); // Not change
-```
-
-### Interface Segregation Principle (ISP)
-"Prevent classes from relying on things that they don't need"
-
-Java concept "https://www.baeldung.com/java-interface-segregation"
-
-JavaScript doesn't have interfaces so this principle doesn't apply as strictly as others. However, it's important and relevant even with JavaScript's lack of type system.
-
-ISP states that "Clients should not be forced to depend upon interfaces that they do not use." Interfaces are implicit contracts in JavaScript because of duck typing.
-
-A good example to look at that demonstrates this principle in JavaScript is for classes that require large settings objects. Not requiring clients to setup huge amounts of options is beneficial, because most of the time they won't need all of the settings. Making them optional helps prevent having a "fat interface".
-
-Example of typescript
-
-```
-interface IWriteProductService {
-    create();
-    update();
-}
-
-interface IReadProductService {
-    findById();
-    searchProducts();
-}
-
-class ProductService implements IWriteProductService, IReadProductService {
-
-    constructor(
-        // Create, Maybe Update doesn't need emailService or SupplierRepo
-        private productRepo: ProductRepo,
-        supplierRepo: SupplierRepo,
-        emailService: EmailService,
-        kinesisService: KinesisService,
-        // Read
-        redisService: IRedisService,
-    )
-    create() {
-        ...
-    }
-    update() {
-        ...
-    }
-
-    findById() {
-        ...
-    }
-
-    searchProducts() {
-        ...
-    }
-}
-
-```
-Example in Javascript
-
-```
-class BaseProductService {
-
-    constructor(productRepo) {
-        this.productRepo = productRepo;
-    }
-
-    create() {};
-    update() {};
-    findById() {};
-    searchProducts() {};
-}
-
-class ProductService extends BaseProductService {
-
-    constructor({
-        productRepo,
-        supplierRepo,
-        emailService,
-        kinesisService,
-        redisService}) {
-            
-            // Create, Maybe Update doesn't need emailService or SupplierRepo
-            super(productRepo);
-            this.supplierRepo = supplierRepo;
-            this.emailService = emailService;
-            this.kinesisService = kinesisService;
-
-            // Read
-            this.redisService = redisService;
-    }
-
-    create() {
-
-    }
-
-    update() {
-
-    }
-
-    findById() {
-
-    }
-}
-```
-// Imagine that we are using lambda for handling the api, every api request will have their own lambda.
-
-Solution
-```
-class UseCase {
-    execute(params);
-}
-
-class FindProductByIdUseCase extends UseCase {
-    constructor(redisService) {
-    }
-
-    execute(params) {
-        // Implement logic here
-    }
-}
-
-class CreateProductUseCase extends UseCase {
-    ...
-}
-
-class UpdateProductUseCase extends UseCase {
-    ...
-}
-```
-
-### Dependency Inversion Principle (DIP)
-
-This principle states two essential things:
-
-1. High-level modules should not depend on low-level modules. Both should depend on abstractions.
-2. Abstractions should not depend upon details. Details should depend on abstractions.
-
-**Bad**
-```
-class ProductService {
-    constructor() {
-        emailService = new SendGridService();
-        productRepo = new ProductRepository();
-    }
-}
-```
-
-**Good**
-```
-class ProductService {
-    constructor(productRepo, emailService) {
-    }
-}
-```
+You can read SOLID principle article [here](../clean-architecture/DesignPrinciple.md#summary)

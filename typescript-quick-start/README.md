@@ -1,7 +1,7 @@
 # **Summary**
 
 -   [Introduction](#introduction)
--   [Compare typescript vs es6](#compare-typescript-vs-es6)
+-   [Compare Typescript vs ES6](#compare-typescript-vs-es6)
 -   [Declarations](#declaration):
     -   [Variable](#variable)
     -   [Function](#function)
@@ -52,8 +52,9 @@ const bigInteger: bigint = 9007199254740991n;
 **Note**: Avoid using the Number type as much as possible.
 
 -   **String**:
-    TypeScript uses double quotes (") or single quotes (') to surround string
-    We can use **backtick** (`) to implement multiline string and string interpolation (string literals)
+   
+    -   TypeScript uses double quotes (") or single quotes (') to surround string.
+    -   We can use **backtick** (`) to implement multiline string and string interpolation (string literals)
 
 **Example**:
 
@@ -63,7 +64,7 @@ const role: string = 'Software Architecture';
 const multiline: string = `Hello
 world
 `;
-const stringLiterals = `Hi, my name is ${name} and I am ${role}`;
+const stringLiterals = `Hi, my name is ${name} and my role is ${role}`;
 ```
 
 -   **Boolean**:
