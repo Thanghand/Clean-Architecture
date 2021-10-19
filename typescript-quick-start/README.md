@@ -53,8 +53,8 @@ const bigInteger: bigint = 9007199254740991n;
 
 -   **String**:
    
--   TypeScript uses double quotes (") or single quotes (') to surround string.
--   We can use **backtick** (`) to implement multiline string and string interpolation (string literals)
+    -   TypeScript uses double quotes (") or single quotes (') to surround string.
+    -   We can use **backtick** (`) to implement multiline string and string interpolation (string literals)
 
 **Example**:
 
