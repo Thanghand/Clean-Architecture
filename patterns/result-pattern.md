@@ -1,9 +1,21 @@
-# **Syllabus**
+# **Summary**
 
 -   [What is Error Handling?](#what-is-error-handling)
 -   [Problem with try/catch?](#problem-with-trycatch)
-    -   [We don't know the function called have try/catch or not](#)
-    -   [Every code logic all wrapped on try/catch.](#)
+    -   [We don't know the function called have try/catch or not](#we-dont-know-the-function-called-have-trycatch-or-not)
+    -   [Every code logic all wrapped on try/catch.](#every-code-logic-all-wrapped-on-trycatch)
+    -   [Hard to write Unit test.](#hard-to-write-unit-test)
+    -   [Forget to catch the error we've thrown](#forget-to-catch-the-error-weve-thrown)
+-   [What is Result Pattern ?](#what-is-result-pattern)
+-   [Why using Result Pattern ?](#why-using-result-pattern)
+    -   [Make our code more functional](#make-our-code-more-functional)
+    -   [Help users know and force them to return specified type wrapped by Result](#help-users-know-and-force-them-to-return-specified-type-wrapped-by-result)
+    -   [Write unit tests easier](#write-unit-tests-easier)
+    -   [Is the right tool for writing TDD more conveniently](#is-the-right-tool-for-writing-tdd-more-conveniently)
+-   [UseCases](#usecases)
+    -   [Use Result Pattern to map error from business layer to presentation layer](#use-result-pattern-to-map-error-from-business-layer-to-presentation-layer)
+-   [Conclusion](#conclusion)
+-   [References](#references)
 
 # **What is Error Handling?**
 
@@ -30,7 +42,7 @@ Using try/catch is a traditional way of Error Handling, it provides basic syntax
 ```typescript
 const getAverage = (a: number, b: number) => {
     // Do you know this function have try catch or not?
-    const total: number = sum();
+    const total: number = sum(a, b);
 };
 ```
 
@@ -108,7 +120,7 @@ With the Result class, we can:
 -   collect the value with **getValue()**
 -   check for the validity of an array of Results using **Result.combine(results: Result[])**
 
-# **Why - Benefit of using Result Pattern?**
+# **Why using Result Pattern?**
 
 There are 3 main purposes:
 
@@ -120,10 +132,11 @@ There are 3 main purposes:
 
 -   Result Pattern make code flow more readable and clarify.
 
--   **Create the user behavior**: must to catch fail case first if the return type is Result.
+-   **Create the user behavior**: must to catch fail cases first if the return type is **Result**.
+
+**Example:**
 
 ```typescript
-// Definition.
 class Product {
     public static validate(props: ProductProps): Result<void> {
         const { title, price } = props;
@@ -152,7 +165,7 @@ class Product {
 }
 ```
 
-## **Help user know and force them to return specify type wrapped by Result.**
+## **Help users know and force them to return specified type wrapped by Result.**
 
 -   By passing the Result type on the returned value, we'll know exactly that function will return fail in some cases and we must catch it before returning truth value.
 
@@ -169,12 +182,13 @@ class GetUserInformationUseCase {
 }
 ```
 
-## **Write unit test easier.**
+## **Write unit tests easier.**
 
 **Example**:
 
 ```typescript
 // product.spec.ts
+
 describe("product model") {
     // check success case
     it("should create model success") {
@@ -200,21 +214,106 @@ describe("product model") {
 }
 ```
 
-## **Is the right tool for write TDD convenient**
+## **Is the right tool for writing TDD more conveniently**
 
--   As we've known, TDD is a mindset help developer how to design code that write unit test more easily, with high quality, and at in any time of the business lifecycle.
+-   As we've known, TDD is a mindset that helps developers how to design code that writes unit tests more easily, with high quality, and at any time of the business lifecycle.
 
--   With Result Pattern, it help us to write fast, clarify and high quality test case. Mean it adapts with TDD perfectly.
+-   With Result Pattern, help us to write fast, clarify, and high-quality test case. Mean it adapts with TDD perfectly.
 
-# **UseCases**
+# **UseCases:**
 
-**Use Case 1:** Result Pattern help us write unit test fast, readable and high quality, high maintainable
+## **Use Result Pattern to map error from business layer to presentation layer**
 
-**Use Case 2:** In Mono Repo application.
+Convert error of business layer to presentation - app layer error (**API**) by **Result Mapper** class.
 
-<!-- # **Do I need it? Why it combine with DDD in large scale app so convenient and perfectly.** -->
+-   **Prepare UseCase Errors**
+
+```typescript
+export class BadInputError<T> extends Result<T> {
+    public constructor(error: string = 'Bad Input Error') {
+        super(false, error, null);
+    }
+}
+
+export class NotFoundError<T> extends Result<T> {
+    public constructor(error: string = 'Not Found Error') {
+        super(false, error, null);
+    }
+}
+```
+
+-   **Business Layer**
+
+```typescript
+class GetProductByIdUseCase {
+    constructor(private readonly productRepository: IProductRepository) {}
+
+    public static async execute(id: string): Result<Product> {
+        const foundedProduct: Product | undefined =
+            await this.productRepository.getById(id);
+        if (!foundedProduct) {
+            return new NotFoundError(`Product id: ${id} was not found`);
+        }
+
+        return Result.ok(foundedProduct);
+    }
+}
+```
+
+-   **Result Mapper**
+
+```typescript
+class ResultMapper {
+    public static toApiBodyResponse<T>(
+        resultOrError: Result<T>,
+        statusCode: number = 200,
+        successMessage?: string
+    ): BodyResponse<T> {
+        if (resultOrError.isFailure) {
+            if (resultOrError instanceof BadInputError) {
+                throw new BadRequestExceptionError(resultOrError.error);
+            }
+
+            if (resultOrError instanceof NotFoundError) {
+                throw new NotFoundExceptionError(resultOrError.error);
+            }
+        }
+
+        return new ResponseBuilder<T>()
+            .withStatusCode(statusCode)
+            .withData(resultOrError.getValue())
+            .withMessage(successMessage)
+            .toJson();
+    }
+}
+```
+
+-   **Swagger API - presentation layer.**
+
+```typescript
+export class ProductController {
+
+  @ApiResponse({
+    description: 'Execute successfully',
+    type: () => ProductResponseDocument,
+    status: 200,
+  })
+  @Get(":id")
+  async getProductById(
+    @Param('id') id: string,
+  ): Promise<BodyResponse<ProductResponseDocument>> {
+    const productOrError = await GetProductByIdUseCase.execute(id);
+
+    return ResultMapper.toApiBodyResponse(productOrError);
+  }
+
+```
 
 # **Conclusion.**
+
+-   Result Pattern is the best practice for Error Handling.
+-   Result Pattern solves almost problems of Error Handling effectively than try/catch does.
+-   Result Pattern reduce time to cover fail cases logic, it become strong in large-scale apps.
 
 # **References**
 
