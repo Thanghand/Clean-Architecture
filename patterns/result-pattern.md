@@ -208,9 +208,7 @@ describe("product model") {
 
 # **UseCases**
 
-**Use Case 1:** Result Pattern help us write unit test fast, readable and high quality, high maintainable
-
-**Use Case 2:** In Mono Repo application.
+**Use Case 1:** Convert result or business layer to app layer (API) by ResultMapper.
 
 <!-- # **Do I need it? Why it combine with DDD in large scale app so convenient and perfectly.** -->
 
