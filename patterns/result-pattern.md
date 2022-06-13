@@ -152,7 +152,7 @@ class Product {
 }
 ```
 
-## **Result Pattern help user know and force user to return specify type wrapped by Result.**
+## **Help user know and force them to return specify type wrapped by Result.**
 
 -   By passing the Result type on the returned value, we'll know exactly that function will return fail in some cases and we must catch it before returning truth value.
 
@@ -200,9 +200,11 @@ describe("product model") {
 }
 ```
 
-## **Is a tool for write TDD so much easier**
+## **Is the right tool for write TDD convenient**
 
--   With Result Pattern, it help us to write fast and high quality test case.
+-   As we've known, TDD is a mindset help developer how to design code that write unit test more easily, with high quality, and at in any time of the business lifecycle.
+
+-   With Result Pattern, it help us to write fast, clarify and high quality test case. Mean it adapts with TDD perfectly.
 
 # **UseCases**
 
